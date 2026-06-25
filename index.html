@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suraj Singh Bartwal — Video Editor &amp; Motion Designer</title>
+<meta name="description" content="Portfolio of Suraj Singh Bartwal — video editor, motion graphics specialist and graphic designer based in Delhi, India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:        #09090d;
+  --surface:   rgba(255,255,255,0.035);
+  --surface-2: rgba(255,255,255,0.06);
+  --border:    rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.22);
+
+  --text:      #f3f3f6;
+  --text-dim:  #9b9ba7;
+  --text-faint:#5d5d68;
+
+  --accent-1:  #8b5cf6; /* violet  */
+  --accent-2:  #3b82f6; /* blue    */
+  --accent-3:  #22d3ee; /* cyan    */
+  --gradient:  linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 55%, var(--accent-3) 100%);
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 9px;
+  --nav-h: 72px;
+  --container: 1140px;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,video{ max-width:100%; display:block; }
+button,input{ font-family:inherit; }
+button{ cursor:pointer; background:none; border:none; color:inherit; }
+a{ color:inherit; text-decoration:none; }
+.container{ width:100%; max-width:var(--container); margin:0 auto; padding:0 24px; }
+
+.skip-link{
+  position:absolute; left:-999px; top:0;
+  background:var(--accent-3); color:#04141a; padding:8px 14px; z-index:3000; font-size:.85rem;
+}
+.skip-link:focus{ left:8px; top:8px; }
+:focus-visible{ outline:2px solid var(--accent-3); outline-offset:3px; border-radius:4px; }
+
+.grad-text{
+  background:var(--gradient);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+#nav{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  height:var(--nav-h);
+  background:rgba(9,9,13,0.7);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  height:100%; display:flex; align-items:center; justify-content:space-between; gap:20px;
+}
+.brand{ font-size:1.2rem; font-weight:700; letter-spacing:-.01em; flex-shrink:0; }
+.nav-links{ display:flex; gap:30px; }
+.nav-links a{ font-size:.92rem; color:var(--text-dim); transition:color .2s; }
+.nav-links a:hover{ color:var(--text); }
+.nav-right{ display:flex; align-items:center; gap:14px; }
+.nav-toggle{ display:none; font-size:1.4rem; padding:4px; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  font-size:.92rem; font-weight:600;
+  padding:12px 22px; border-radius:999px;
+  transition:transform .18s ease, opacity .18s ease, border-color .18s ease;
+  white-space:nowrap;
+}
+.btn-grad{ background:var(--gradient); color:#070710; }
+.btn-grad:hover{ transform:translateY(-2px); opacity:.92; }
+.btn-outline{ border:1px solid var(--border); color:var(--text); }
+.btn-outline:hover{ border-color:var(--border-strong); transform:translateY(-2px); }
+.btn-sm{ padding:9px 18px; font-size:.85rem; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  padding:calc(var(--nav-h) + 96px) 0 110px;
+  overflow:hidden;
+}
+.aurora{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+.blob{
+  position:absolute; border-radius:50%;
+  filter:blur(70px); opacity:.55;
+}
+.b1{ width:560px; height:560px; top:-180px; left:-120px; background:var(--accent-1); animation:drift1 22s ease-in-out infinite alternate; }
+.b2{ width:480px; height:480px; top:-80px; right:-160px; background:var(--accent-2); animation:drift2 26s ease-in-out infinite alternate; }
+.b3{ width:420px; height:420px; bottom:-220px; left:30%; background:var(--accent-3); opacity:.35; animation:drift3 24s ease-in-out infinite alternate; }
+@keyframes drift1{ from{ transform:translate(0,0); } to{ transform:translate(60px,40px); } }
+@keyframes drift2{ from{ transform:translate(0,0); } to{ transform:translate(-50px,50px); } }
+@keyframes drift3{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(30px,-30px) scale(1.08); } }
+
+.hero-inner{ position:relative; z-index:1; text-align:center; }
+.pill-badge{
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--border); background:var(--surface);
+  border-radius:999px; padding:8px 16px; font-size:.82rem; color:var(--text-dim);
+  margin-bottom:28px;
+}
+.pill-badge .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent-3); box-shadow:0 0 8px var(--accent-3); }
+
+.hero h1{
+  font-size:clamp(2.5rem, 5.6vw, 4.4rem); font-weight:800; letter-spacing:-.02em; line-height:1.08;
+  max-width:880px; margin:0 auto 22px;
+}
+.hero .lede{ color:var(--text-dim); font-size:clamp(1rem,1.4vw,1.15rem); max-width:540px; margin:0 auto 36px; }
+.hero-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:46px; }
+.hero-stats{
+  display:flex; gap:28px; justify-content:center; flex-wrap:wrap;
+  font-size:.85rem; color:var(--text-faint);
+}
+.hero-stats b{ color:var(--text-dim); font-weight:600; }
+
+/* ============================================================
+   SECTION SCAFFOLD
+   ============================================================ */
+section{ padding:100px 0; position:relative; }
+.section-head{ max-width:620px; margin-bottom:48px; }
+.eyebrow{
+  font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  margin-bottom:14px; display:inline-block;
+}
+h2.section-title{ font-size:clamp(1.8rem,3.2vw,2.5rem); font-weight:700; letter-spacing:-.015em; margin-bottom:12px; }
+.section-sub{ color:var(--text-dim); }
+
+/* ============================================================
+   CATEGORY TABS
+   ============================================================ */
+.tabs-wrap{
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  margin-bottom:36px;
+}
+.tabs-track{
+  position:relative;
+  display:inline-flex; gap:4px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:999px; padding:5px;
+  overflow-x:auto; max-width:100%;
+  scrollbar-width:none;
+}
+.tabs-track::-webkit-scrollbar{ display:none; }
+.tabs-indicator{
+  position:absolute; top:5px; left:5px; height:calc(100% - 10px);
+  background:var(--gradient); border-radius:999px; z-index:0;
+  transition:left .28s cubic-bezier(.4,0,.2,1), width .28s cubic-bezier(.4,0,.2,1);
+}
+.tab{
+  position:relative; z-index:1;
+  padding:10px 18px; font-size:.86rem; font-weight:600; color:var(--text-dim);
+  border-radius:999px; white-space:nowrap; transition:color .2s;
+}
+.tab.active{ color:#070710; }
+.tab-count{ font-size:.82rem; color:var(--text-faint); white-space:nowrap; }
+
+/* ============================================================
+   UPLOAD GRID
+   ============================================================ */
+.cat-grid{
+  display:none;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:20px;
+}
+.cat-grid.active{ display:grid; }
+
+.upload-slot{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  display:flex; flex-direction:column;
+  min-height:236px;
+  transition:border-color .2s, transform .2s;
+}
+.upload-slot.empty{ justify-content:center; align-items:center; border-style:dashed; }
+.upload-slot.empty:hover{ border-color:var(--border-strong); background:var(--surface-2); }
+
+.slot-click{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:100%; height:100%; padding:30px 14px;
+  color:var(--text-faint);
+}
+.slot-click svg{ width:26px; height:26px; color:var(--text-dim); }
+.slot-click span{ font-size:.9rem; font-weight:600; color:var(--text-dim); }
+.slot-click small{ font-size:.74rem; }
+.upload-slot.empty:hover .slot-click svg,
+.upload-slot.empty:hover .slot-click span{ color:var(--text); }
+
+.upload-slot.filled{ border-style:solid; }
+.slot-media{
+  position:relative; aspect-ratio:16/10; overflow:hidden; cursor:pointer; background:#000;
+}
+.slot-media img, .slot-media video{ width:100%; height:100%; object-fit:cover; }
+.ratio-badge{
+  position:absolute; top:8px; right:8px;
+  font-size:.68rem; font-weight:600; color:var(--text);
+  background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.15);
+  padding:3px 7px; border-radius:6px; backdrop-filter:blur(4px);
+}
+.play-chip{
+  position:absolute; bottom:8px; left:8px;
+  width:26px; height:26px; border-radius:50%;
+  background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.18);
+  display:flex; align-items:center; justify-content:center; font-size:.7rem; color:#fff;
+}
+.preview-hint{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.35); opacity:0; transition:opacity .2s;
+  font-size:.82rem; font-weight:600; color:#fff;
+}
+.slot-media:hover .preview-hint{ opacity:1; }
+
+.slot-foot{
+  display:flex; align-items:center; gap:8px;
+  padding:10px 10px 10px 14px;
+  border-top:1px solid var(--border);
+}
+.slot-title{
+  flex:1; min-width:0;
+  background:none; border:none; color:var(--text);
+  font-size:.88rem; font-weight:500;
+  padding:4px 0;
+}
+.slot-title::placeholder{ color:var(--text-faint); }
+.slot-actions{ display:flex; gap:4px; flex-shrink:0; }
+.icon-btn{
+  width:30px; height:30px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-faint); transition:background .2s, color .2s;
+}
+.icon-btn svg{ width:15px; height:15px; }
+.icon-btn:hover{ background:var(--surface-2); color:var(--text); }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid{ display:grid; grid-template-columns:280px 1fr; gap:56px; align-items:start; }
+.about-photo{
+  position:relative; aspect-ratio:1/1; border-radius:var(--radius-lg);
+  background:var(--surface); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.about-photo::before{
+  content:""; position:absolute; inset:-2px; z-index:0;
+  background:var(--gradient); opacity:.18; filter:blur(30px);
+}
+.about-photo span{
+  position:relative; z-index:1; font-size:.85rem; color:var(--text-faint); text-align:center; line-height:1.7;
+}
+.about-bio p{ color:var(--text-dim); margin-bottom:18px; max-width:560px; }
+.chip-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+.chip{
+  font-size:.82rem; font-weight:500; color:var(--text-dim);
+  border:1px solid var(--border); border-radius:999px; padding:8px 16px;
+  transition:border-color .2s, color .2s;
+}
+.chip:hover{ border-color:var(--accent-2); color:var(--text); }
+
+/* ============================================================
+   TOOLS
+   ============================================================ */
+#stack{ border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.tools-row{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-card{
+  position:relative; overflow:hidden;
+  border-radius:var(--radius-lg);
+  padding:72px 40px; text-align:center;
+  background:var(--gradient);
+  color:#070710;
+}
+.contact-card h2{ font-size:clamp(1.9rem,4vw,3rem); font-weight:800; letter-spacing:-.01em; margin-bottom:14px; }
+.contact-card p{ opacity:.8; max-width:480px; margin:0 auto 32px; }
+.contact-card .btn-outline{ border-color:rgba(7,7,16,.35); color:#070710; }
+.contact-card .btn-outline:hover{ border-color:#070710; }
+.contact-card .btn-dark{ background:#070710; color:#f3f3f6; }
+.contact-card .btn-dark:hover{ transform:translateY(-2px); opacity:.9; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{ padding:48px 0 28px; }
+.footer-row{
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;
+  padding-bottom:28px; border-bottom:1px solid var(--border); margin-bottom:20px;
+}
+.social-row{ display:flex; gap:18px; }
+.social-row a{ font-size:.85rem; color:var(--text-dim); transition:color .2s; }
+.social-row a:hover{ color:var(--text); }
+.copyright{ font-size:.8rem; color:var(--text-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal{
+  display:none; position:fixed; inset:0; z-index:2000;
+  background:rgba(5,5,8,.85);
+  align-items:center; justify-content:center; padding:24px;
+}
+.modal.open{ display:flex; }
+.modal-content{
+  position:relative; width:100%; max-width:820px;
+  background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:22px;
+}
+.modal-content h3{ font-size:1.1rem; font-weight:600; margin-bottom:14px; padding-right:30px; }
+.modal-body{ border-radius:var(--radius-sm); overflow:hidden; background:#000; }
+.modal-body img, .modal-body video{ width:100%; max-height:70vh; object-fit:contain; }
+.close{ position:absolute; top:18px; right:20px; font-size:1.2rem; color:var(--text-dim); }
+.close:hover{ color:var(--text); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:860px){
+  .about-grid{ grid-template-columns:1fr; }
+  .about-photo{ max-width:260px; }
+}
+@media (max-width:760px){
+  .nav-links{
+    position:absolute; top:100%; left:0; right:0;
+    flex-direction:column; gap:0;
+    background:rgba(9,9,13,.97); border-bottom:1px solid var(--border);
+    max-height:0; overflow:hidden; transition:max-height .25s ease;
+  }
+  .nav-links.open{ max-height:260px; }
+  .nav-links a{ padding:16px 24px; border-top:1px solid var(--border); }
+  .nav-toggle{ display:block; }
+  .nav-right .btn-sm{ display:none; }
+}
+@media (max-width:640px){
+  section{ padding:72px 0; }
+  .contact-card{ padding:48px 22px; }
+}
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; }
+  .tabs-indicator{ transition:none; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#work">Skip to content</a>
+
+<!-- ============ NAV ============ -->
+<nav id="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#hero" data-target="#hero">Suraj<span class="grad-text">.</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#work" data-target="#work">Work</a>
+      <a href="#about" data-target="#about">About</a>
+      <a href="#stack" data-target="#stack">Tools</a>
+      <a href="#contact" data-target="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a class="btn btn-grad btn-sm" href="#contact" data-target="#contact">Let's talk</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="hero">
+  <div class="aurora"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+  <div class="container hero-inner">
+    <span class="pill-badge"><span class="dot"></span> Open to freelance &amp; full-time work</span>
+    <h1>Video edits that make people <span class="grad-text">stop scrolling.</span></h1>
+    <p class="lede">I'm Suraj Singh Bartwal — a video editor, motion designer and graphic designer
+    based in Delhi, turning footage and AI-generated assets into finished, on-brand content.</p>
+    <div class="hero-actions">
+      <a class="btn btn-grad" href="#work" data-target="#work">View my work</a>
+      <a class="btn btn-outline" href="#contact" data-target="#contact">Get in touch</a>
+    </div>
+    <div class="hero-stats">
+      <span><b>4</b> categories</span>
+      <span><b>24</b> project slots</span>
+      <span>AI-assisted workflow</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ WORK ============ -->
+<section id="work">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow grad-text">PORTFOLIO</span>
+      <h2 class="section-title">Browse by category</h2>
+      <p class="section-sub" id="categoryBlurb">Visuals generated with AI tools, composited and finished by hand.</p>
+    </div>
+
+    <div class="tabs-wrap">
+      <div class="tabs-track" id="tabsTrack">
+        <span class="tabs-indicator" id="tabsIndicator"></span>
+        <button class="tab active" data-cat="ai">AI Generated</button>
+        <button class="tab" data-cat="saas">SaaS Video</button>
+        <button class="tab" data-cat="longform">Long-Form Explainer</button>
+        <button class="tab" data-cat="shortform">Short-Form Explainer</button>
+      </div>
+      <span class="tab-count" id="tabCount">0 / 6 uploaded</span>
+    </div>
+
+    <div class="cat-grid active" data-cat-grid="ai" id="grid-ai"></div>
+    <div class="cat-grid" data-cat-grid="saas" id="grid-saas"></div>
+    <div class="cat-grid" data-cat-grid="longform" id="grid-longform"></div>
+    <div class="cat-grid" data-cat-grid="shortform" id="grid-shortform"></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow grad-text">ABOUT</span>
+      <h2 class="section-title">A bit about me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-photo"><span>PHOTO<br>PLACEHOLDER<br>— swap for headshot —</span></div>
+      <div class="about-bio">
+        <p>I'm a video editor, motion graphics specialist and graphic designer based in Delhi, India.
+        I currently work at Oodles Technology in Gurugram, with past experience at V2Infotech and PrepBytes,
+        alongside freelance projects on Upwork.</p>
+        <p>My work spans motion graphics, SaaS product video, long and short-form explainers, and
+        AI-assisted production using tools like Kling AI, Veo 3, Nano Banana and Seedream.</p>
+        <div class="chip-row">
+          <span class="chip">Motion Graphics</span>
+          <span class="chip">SaaS Video</span>
+          <span class="chip">AI-Assisted Production</span>
+          <span class="chip">Graphic Design</span>
+          <span class="chip">Color Grading</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOOLS ============ -->
+<section id="stack">
+  <div class="container">
+    <div class="section-head" style="margin-bottom:30px;">
+      <span class="eyebrow grad-text">TOOLS</span>
+      <h2 class="section-title">What I work with</h2>
+    </div>
+    <div class="tools-row">
+      <span class="chip">Premiere Pro</span>
+      <span class="chip">After Effects</span>
+      <span class="chip">DaVinci Resolve</span>
+      <span class="chip">Photoshop</span>
+      <span class="chip">Illustrator</span>
+      <span class="chip">Kling AI</span>
+      <span class="chip">Veo 3</span>
+      <span class="chip">Nano Banana</span>
+      <span class="chip">Seedream</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-card">
+      <h2>Got footage that needs a cut?</h2>
+      <p>Open to freelance projects, retainers and full-time collaborations. Usually replies within a day.</p>
+      <div class="hero-actions" style="margin-bottom:0;">
+        <a class="btn btn-dark" href="mailto:hello@example.com">Email me</a>
+        <a class="btn btn-outline" href="#">Download résumé</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-row">
+      <a class="brand" href="#hero" data-target="#hero">Suraj<span class="grad-text">.</span></a>
+      <div class="social-row">
+        <a href="#">Mail</a><a href="#">Instagram</a><a href="#">Behance</a><a href="#">LinkedIn</a><a href="#">Upwork</a>
+      </div>
+    </div>
+    <div class="copyright">
+      <span>© 2026 Suraj Singh Bartwal. All rights reserved.</span>
+      <span>Made in Delhi, India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <button class="close" id="modalClose" aria-label="Close">✕</button>
+    <h3 id="modalTitle">Project</h3>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- nav: smooth scroll + mobile toggle ---------------- */
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      const target = document.querySelector(el.getAttribute('data-target'));
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block:'start' });
+        navLinks.classList.remove('open');
+      }
+    });
+  });
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', ()=>{
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+
+  /* ---------------- category data ---------------- */
+  const categories = [
+    { key:'ai',         label:'AI Generated',          blurb:'Visuals generated with AI tools like Kling, Veo 3, Nano Banana and Seedream — composited and finished by hand.' },
+    { key:'saas',       label:'SaaS Video',             blurb:'Product walkthroughs, feature explainers and onboarding clips built for SaaS teams.' },
+    { key:'longform',   label:'Long-Form Explainer',    blurb:'Narrative-driven explainers and brand stories edited for YouTube, webinars and landing pages.' },
+    { key:'shortform',  label:'Short-Form Explainer',   blurb:'Punchy, caption-led cuts built for Reels, Shorts and TikTok.' }
+  ];
+  const MAX_SLOTS = 6;
+  const state = {};
+  categories.forEach(c=> state[c.key] = Array(MAX_SLOTS).fill(null));
+  let activeCat = 'ai';
+
+  const tabsTrack   = document.getElementById('tabsTrack');
+  const indicator   = document.getElementById('tabsIndicator');
+  const blurbEl     = document.getElementById('categoryBlurb');
+  const tabCountEl  = document.getElementById('tabCount');
+  const tabs        = Array.from(document.querySelectorAll('.tab'));
+  const grids       = Array.from(document.querySelectorAll('.cat-grid'));
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function ratioLabel(w,h){
+    if(!w || !h) return '—';
+    const r = w/h;
+    const close = (t,tol=0.12)=> Math.abs(r-t) < tol;
+    if(close(16/9)) return '16:9';
+    if(close(9/16)) return '9:16';
+    if(close(1))    return '1:1';
+    if(close(4/3))  return '4:3';
+    if(close(3/4))  return '3:4';
+    return r>1 ? r.toFixed(2)+':1' : '1:'+(1/r).toFixed(2);
+  }
+
+  function emptySlotHTML(){
+    return `
+      <input type="file" accept="image/*,video/*" hidden>
+      <button type="button" class="slot-click" aria-label="Add project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Add project</span>
+        <small>JPG, PNG, MP4</small>
+      </button>`;
+  }
+
+  function filledSlotHTML(entry){
+    const media = entry.type === 'video'
+      ? `<video src="${entry.url}" muted loop playsinline preload="metadata"></video>`
+      : `<img src="${entry.url}" alt="">`;
+    return `
+      <div class="slot-media">
+        ${media}
+        ${entry.type === 'video' ? '<span class="play-chip">&#9658;</span>' : ''}
+        <span class="ratio-badge">${entry.ratio}</span>
+        <span class="preview-hint">Preview</span>
+      </div>
+      <div class="slot-foot">
+        <input type="text" class="slot-title" value="${escapeHtml(entry.title)}" placeholder="Untitled project">
+        <div class="slot-actions">
+          <button type="button" class="icon-btn slot-replace" aria-label="Replace file" title="Replace">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4v6h6M20 20v-6h-6M5 19a8 8 0 0 0 13-5M19 5a8 8 0 0 0-13 5"/></svg>
+          </button>
+          <button type="button" class="icon-btn slot-remove" aria-label="Remove project" title="Remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M7 7l1 12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-12"/></svg>
+          </button>
+        </div>
+      </div>
+      <input type="file" accept="image/*,video/*" hidden>`;
+  }
+
+  function bindEmpty(wrap, catKey, idx){
+    const input = wrap.querySelector('input[type=file]');
+    input.addEventListener('change', e => handleFile(catKey, idx, e.target.files[0]));
+    wrap.querySelector('.slot-click').addEventListener('click', () => input.click());
+  }
+
+  function bindFilled(wrap, catKey, idx, entry){
+    const input = wrap.querySelector('input[type=file]');
+    input.addEventListener('change', e => handleFile(catKey, idx, e.target.files[0]));
+    wrap.querySelector('.slot-replace').addEventListener('click', () => input.click());
+    wrap.querySelector('.slot-remove').addEventListener('click', () => {
+      state[catKey][idx] = null;
+      renderSlot(catKey, idx);
+    });
+    wrap.querySelector('.slot-title').addEventListener('input', e => { entry.title = e.target.value; });
+    const media = wrap.querySelector('.slot-media');
+    media.addEventListener('click', () => openModal(entry));
+    if(entry.type === 'video'){
+      const v = wrap.querySelector('video');
+      if(!reduceMotion){
+        media.addEventListener('mouseenter', () => v.play().catch(()=>{}));
+        media.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+      }
+    }
+  }
+
+  function renderSlot(catKey, idx){
+    const wrap = document.querySelector(`.upload-slot[data-cat="${catKey}"][data-idx="${idx}"]`);
+    const entry = state[catKey][idx];
+    if(!entry){
+      wrap.className = 'upload-slot empty';
+      wrap.innerHTML = emptySlotHTML();
+      bindEmpty(wrap, catKey, idx);
+    } else {
+      wrap.className = 'upload-slot filled';
+      wrap.innerHTML = filledSlotHTML(entry);
+      bindFilled(wrap, catKey, idx, entry);
+    }
+    updateCount(catKey);
+  }
+
+  function updateBadge(catKey, idx){
+    const wrap = document.querySelector(`.upload-slot[data-cat="${catKey}"][data-idx="${idx}"]`);
+    const badge = wrap && wrap.querySelector('.ratio-badge');
+    if(badge) badge.textContent = state[catKey][idx].ratio;
+  }
+
+  function handleFile(catKey, idx, file){
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    const isVideo = file.type.startsWith('video');
+    const entry = { url, type: isVideo ? 'video' : 'image', title:'Untitled project', ratio:'—' };
+    state[catKey][idx] = entry;
+    renderSlot(catKey, idx);
+    if(isVideo){
+      const v = document.createElement('video');
+      v.preload = 'metadata'; v.src = url;
+      v.onloadedmetadata = () => { entry.ratio = ratioLabel(v.videoWidth, v.videoHeight); updateBadge(catKey, idx); };
+    } else {
+      const img = new Image();
+      img.onload = () => { entry.ratio = ratioLabel(img.naturalWidth, img.naturalHeight); updateBadge(catKey, idx); };
+      img.src = url;
+    }
+  }
+
+  function buildGrids(){
+    categories.forEach(cat=>{
+      const grid = document.getElementById('grid-'+cat.key);
+      for(let i=0; i<MAX_SLOTS; i++){
+        const wrap = document.createElement('div');
+        wrap.className = 'upload-slot empty';
+        wrap.dataset.cat = cat.key;
+        wrap.dataset.idx = i;
+        wrap.innerHTML = emptySlotHTML();
+        bindEmpty(wrap, cat.key, i);
+        grid.appendChild(wrap);
+      }
+    });
+  }
+
+  function updateCount(catKey){
+    if(activeCat !== catKey) return;
+    const filled = state[catKey].filter(Boolean).length;
+    tabCountEl.textContent = filled + ' / ' + MAX_SLOTS + ' uploaded';
+  }
+
+  function positionIndicator(){
+    const activeBtn = document.querySelector('.tab.active');
+    if(!activeBtn) return;
+    indicator.style.width = activeBtn.offsetWidth + 'px';
+    indicator.style.left = activeBtn.offsetLeft + 'px';
+  }
+
+  function setActiveTab(key){
+    activeCat = key;
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.cat === key));
+    grids.forEach(g => g.classList.toggle('active', g.dataset.catGrid === key));
+    blurbEl.textContent = categories.find(c => c.key === key).blurb;
+    updateCount(key);
+    positionIndicator();
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => setActiveTab(t.dataset.cat)));
+  window.addEventListener('resize', positionIndicator);
+
+  buildGrids();
+  setActiveTab('ai');
+  requestAnimationFrame(positionIndicator);
+
+  /* ---------------- modal ---------------- */
+  const modal = document.getElementById('previewModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+
+  function openModal(entry){
+    modalTitle.textContent = entry.title || 'Untitled project';
+    modalBody.innerHTML = entry.type === 'video'
+      ? `<video src="${entry.url}" controls autoplay></video>`
+      : `<img src="${entry.url}" alt="">`;
+    modal.classList.add('open');
+    document.getElementById('modalClose').focus();
+  }
+  function closeModal(){ modal.classList.remove('open'); modalBody.innerHTML = ''; }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+})();
+</script>
+</body>
+</html>
