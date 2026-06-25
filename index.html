@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suraj Singh Bartwal — Video Editor &amp; Motion Graphic Designer</title>
-<meta name="description" content="Portfolio of Suraj Singh Bartwal — video editor, motion graphics specialist based in Delhi, India.">
+<title>Suraj Singh Bartwal — Video Editor &amp; Motion Designer</title>
+<meta name="description" content="Portfolio of Suraj Singh Bartwal — video editor, motion graphics specialist and graphic designer based in Delhi, India.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -698,6 +698,9 @@ footer{ padding:48px 0 28px; }
         wrap.innerHTML = emptySlotHTML();
         bindEmpty(wrap, cat.key, i);
         grid.appendChild(wrap);
+        if(state[cat.key] && state[cat.key][i]){
+          renderSlot(cat.key,i);
+        }
       }
     });
   }
