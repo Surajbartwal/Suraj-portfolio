@@ -47,8 +47,6 @@ a{color:inherit;text-decoration:none;}
 .skip-link:focus{left:8px;top:8px;}
 :focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border-radius:4px;}
 .grad-text{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
-
-/* ── GLASSMORPHISM UTIL ── */
 .glass{background:var(--glass-1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--border-mid);}
 
 /* ── NAV ── */
@@ -100,14 +98,24 @@ section{padding:100px 0;position:relative;}
 h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spacing:-.015em;margin-bottom:10px;}
 .section-sub{color:var(--text-dim);font-size:.95rem;}
 
-/* ── TABS ── */
-.tabs-wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
-.tabs-track{position:relative;display:inline-flex;gap:3px;padding:5px;border-radius:999px;background:rgba(255,255,255,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border-mid);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06),0 4px 20px rgba(0,0,0,0.3);overflow-x:auto;max-width:100%;scrollbar-width:none;}
-.tabs-track::-webkit-scrollbar{display:none;}
-.tabs-indicator{position:absolute;top:5px;left:5px;height:calc(100% - 10px);background:var(--gradient);border-radius:999px;z-index:0;transition:left .28s cubic-bezier(.4,0,.2,1),width .28s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 16px rgba(139,92,246,0.45);}
-.tab{position:relative;z-index:1;padding:9px 18px;font-size:.84rem;font-weight:600;color:var(--text-dim);border-radius:999px;white-space:nowrap;transition:color .2s;}
-.tab.active{color:#06060e;}
-.tab-count{font-size:.8rem;color:var(--text-faint);white-space:nowrap;}
+/* ── SWIPEABLE CATEGORY SWITCHER ── */
+.cat-switcher-row{margin-bottom:14px;}
+.cat-switcher-wrap{display:flex;align-items:center;gap:8px;}
+.cat-nav-arrow{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid var(--border-mid);color:var(--text-dim);font-size:1.1rem;transition:background .18s,color .18s,border-color .18s;}
+.cat-nav-arrow:hover{background:rgba(255,255,255,0.12);color:var(--text);border-color:var(--border-strong);}
+.cat-switcher{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 2px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex:1;}
+.cat-switcher::-webkit-scrollbar{display:none;}
+.cat-card{scroll-snap-align:center;flex-shrink:0;width:158px;display:flex;flex-direction:column;align-items:center;gap:9px;padding:18px 12px;border-radius:18px;background:rgba(255,255,255,0.045);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border-mid);color:var(--text-dim);transition:background .22s,border-color .22s,color .22s,transform .22s,box-shadow .22s;}
+.cat-card:hover{border-color:var(--border-strong);color:var(--text);transform:translateY(-2px);}
+.cat-card.active{background:linear-gradient(160deg,rgba(139,92,246,0.16),rgba(34,211,238,0.08));border-color:rgba(139,92,246,0.5);color:var(--text);box-shadow:0 8px 24px rgba(139,92,246,0.18);}
+.cat-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);border:1px solid var(--border-mid);color:var(--text-dim);transition:background .22s,color .22s,border-color .22s;}
+.cat-card-icon svg{width:18px;height:18px;}
+.cat-card.active .cat-card-icon{background:var(--gradient);color:#06060e;border-color:transparent;}
+.cat-card-label{font-size:.8rem;font-weight:600;text-align:center;line-height:1.3;}
+.cat-dots{display:flex;justify-content:center;gap:7px;margin-bottom:10px;}
+.cat-dot{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,0.18);transition:background .22s,width .22s;}
+.cat-dot.active{background:var(--gradient);width:20px;}
+.tab-count{display:block;text-align:center;font-size:.8rem;color:var(--text-faint);margin-bottom:32px;}
 
 /* ── PROJECT GRID ── */
 .cat-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;}
@@ -150,6 +158,7 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .like-btn.liked svg{fill:var(--like);stroke:var(--like);}
 .like-btn.bump svg{animation:likePop .32s ease;}
 @keyframes likePop{0%{transform:scale(1);}40%{transform:scale(1.35);}100%{transform:scale(1);}}
+.like-count{min-width:10px;text-align:left;}
 
 /* ── ABOUT ── */
 .about-grid{display:grid;grid-template-columns:260px 1fr;gap:52px;align-items:start;}
@@ -213,9 +222,10 @@ footer{padding:44px 0 26px;}
   .nav-links a{padding:15px 22px;border-top:1px solid var(--border);}
   .nav-toggle{display:block;}
   .nav-right .btn-sm{display:none;}
+  .cat-nav-arrow{display:none;}
 }
 @media(max-width:640px){section{padding:70px 0;}.contact-card{padding:50px 22px;}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}.tabs-indicator{transition:none;}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}}
 </style>
 </head>
 <body>
@@ -268,16 +278,34 @@ footer{padding:44px 0 26px;}
       <h2 class="section-title">Browse by category</h2>
       <p class="section-sub" id="categoryBlurb">Visuals generated with AI tools, composited and finished by hand.</p>
     </div>
-    <div class="tabs-wrap">
-      <div class="tabs-track" id="tabsTrack">
-        <span class="tabs-indicator" id="tabsIndicator"></span>
-        <button class="tab active" data-cat="ai">AI Generated</button>
-        <button class="tab" data-cat="saas">SaaS Video</button>
-        <button class="tab" data-cat="longform">Long-Form Explainer</button>
-        <button class="tab" data-cat="shortform">Short-Form Explainer</button>
+
+    <div class="cat-switcher-row">
+      <div class="cat-switcher-wrap">
+        <button class="cat-nav-arrow" id="catPrev" aria-label="Previous category">‹</button>
+        <div class="cat-switcher" id="catSwitcher">
+          <button class="cat-card active" data-cat="ai">
+            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></span>
+            <span class="cat-card-label">AI Generated</span>
+          </button>
+          <button class="cat-card" data-cat="saas">
+            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+            <span class="cat-card-label">SaaS Video</span>
+          </button>
+          <button class="cat-card" data-cat="longform">
+            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/></svg></span>
+            <span class="cat-card-label">Long-Form Explainer</span>
+          </button>
+          <button class="cat-card" data-cat="shortform">
+            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span>
+            <span class="cat-card-label">Short-Form Explainer</span>
+          </button>
+        </div>
+        <button class="cat-nav-arrow" id="catNext" aria-label="Next category">›</button>
       </div>
+      <div class="cat-dots" id="catDots"></div>
       <span class="tab-count" id="tabCount">0 / 6 uploaded</span>
     </div>
+
     <div class="cat-grid active" data-cat-grid="ai" id="grid-ai"></div>
     <div class="cat-grid" data-cat-grid="saas" id="grid-saas"></div>
     <div class="cat-grid" data-cat-grid="longform" id="grid-longform"></div>
@@ -391,24 +419,29 @@ footer{padding:44px 0 26px;}
 
      SITE_CONFIG.brandIconLink   → nav logo + browser tab favicon
      SITE_CONFIG.profilePhotoLink → About section headshot
-     Both accept a Google Drive share link, pasted as-is.
 
      PROJECT_LINKS.<category>[slot] → { title, link }
-       - Paste a Google Drive share link  → plays as an embed,
-         hover/click auto-plays it muted, and it opens Google's
-         own player in the modal.
-       - Paste a direct video file URL (ending in .mp4/.webm/.mov,
-         e.g. hosted on GitHub raw, Cloudflare R2, Bunny, etc.)
-         → the site automatically switches to the built-in custom
-         player: hover/click autoplay, and a minimal control bar
-         (play/pause, seek, mute) that auto-hides while playing
-         and reappears on tap/mousemove.
-       - Leave "link" empty ('') to show an empty "Coming soon" slot.
+       - Google Drive share link  → embed, autoplay-on-hover/click,
+         opens Google's own player in the modal.
+       - Direct video file URL (.mp4/.webm/.mov) → switches to the
+         built-in custom player: hover/click autoplay + a minimal
+         control bar (play/pause, seek, mute) that auto-hides while
+         playing and reappears on tap/mousemove.
+       - Leave "link" empty ('') to show a "Coming soon" slot.
+
+     ★ LIKES: powered by countapi.xyz, a free public counter API —
+       no signup needed, but it's a third-party service and can
+       occasionally be slow or unavailable. Counts are shared by
+       every visitor to the site (true global total), keyed by
+       LIKES_NAMESPACE + the project's id. Change LIKES_NAMESPACE
+       below if you ever want to reset all counts to zero.
      ============================================================== */
   const SITE_CONFIG = {
     brandIconLink: 'https://drive.google.com/file/d/1RO_rFDUqr5buUsKSwB-cAP2FnbBuw0JN/preview',
     profilePhotoLink: 'https://drive.google.com/file/d/1CbU0bMw47duakkvSp3g1D5c9IiN2xti_/preview',
   };
+
+  const LIKES_NAMESPACE = 'surajbartwal-portfolio-2026';
 
   const PROJECT_LINKS = {
     ai: [
@@ -454,7 +487,6 @@ footer{padding:44px 0 26px;}
   const MAX_SLOTS = 6;
 
   /* ── URL HELPERS ── */
-  function isDriveLink(url){ return /drive\.google\.com/.test(url); }
   function isDirectVideo(url){ return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url); }
   function toVideoEmbed(url){
     if(!url) return '';
@@ -493,32 +525,76 @@ footer{padding:44px 0 26px;}
     if(wrap) wrap.innerHTML = `<img src="${imgUrl}" alt="Suraj Singh Bartwal" onerror="this.parentElement.innerHTML='<span>Could not load image.<br>Check the link is public.</span>'">`;
   }
 
-  /* ── LIKES (stored per-browser via localStorage — see note in chat) ── */
+  /* ── GLOBAL LIKES via countapi.xyz ── */
+  const COUNTAPI_BASE = 'https://api.countapi.xyz';
+  const remoteCache = {};   // id -> resolved global count
+  const fetchedCats = new Set();
+
   function likeId(catKey, idx){ return catKey + '-' + idx; }
-  function getLikeCount(id){ return parseInt(localStorage.getItem('spb_like_count_' + id) || '0', 10); }
-  function getLiked(id){ return localStorage.getItem('spb_liked_' + id) === '1'; }
-  function toggleLike(id, btnEl, countEl){
-    const liked = getLiked(id);
-    let count = getLikeCount(id);
-    if(liked){
-      count = Math.max(0, count - 1);
-      localStorage.setItem('spb_liked_' + id, '0');
-      btnEl.classList.remove('liked');
-    } else {
-      count += 1;
-      localStorage.setItem('spb_liked_' + id, '1');
-      btnEl.classList.add('liked');
-      btnEl.classList.remove('bump'); void btnEl.offsetWidth; btnEl.classList.add('bump');
+  function getLikedLocal(id){ return localStorage.getItem('spb_liked_' + id) === '1'; }
+  function setLikedLocal(id, val){ localStorage.setItem('spb_liked_' + id, val ? '1' : '0'); }
+
+  async function fetchRemoteCount(id){
+    try{
+      const res = await fetch(`${COUNTAPI_BASE}/get/${LIKES_NAMESPACE}/${id}`);
+      if(!res.ok) throw new Error('missing');
+      const data = await res.json();
+      remoteCache[id] = data.value || 0;
+    } catch(e){
+      remoteCache[id] = remoteCache[id] || 0;
     }
-    localStorage.setItem('spb_like_count_' + id, String(count));
-    countEl.textContent = count;
+    return remoteCache[id];
   }
+  async function hitRemote(id, up){
+    try{
+      const path = up ? `hit/${LIKES_NAMESPACE}/${id}` : `update/${LIKES_NAMESPACE}/${id}?amount=-1`;
+      const res = await fetch(`${COUNTAPI_BASE}/${path}`);
+      const data = await res.json();
+      if(typeof data.value === 'number') remoteCache[id] = Math.max(0, data.value);
+    } catch(e){ /* offline / API hiccup — keep optimistic local value */ }
+    return remoteCache[id];
+  }
+
   function likeButtonHTML(id){
-    const liked = getLiked(id), count = getLikeCount(id);
+    const liked = getLikedLocal(id);
     return `<button type="button" class="like-btn${liked?' liked':''}" data-like-id="${id}" aria-label="Like this project">
       <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 20.5s-7.5-4.6-10-9.3C.6 8 2 4.5 5.5 4c2-.3 3.7.7 5 2.3C11.8 4.7 13.5 3.7 15.5 4c3.5.5 4.9 4 3.5 7.2-2.5 4.7-10 9.3-10 9.3z"/></svg>
-      <span class="like-count">${count}</span>
+      <span class="like-count">–</span>
     </button>`;
+  }
+  function bindLike(wrap, id){
+    const btn = wrap.querySelector('.like-btn');
+    if(!btn) return;
+    const countEl = btn.querySelector('.like-count');
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      const liked = getLikedLocal(id);
+      let displayed = parseInt(countEl.textContent, 10); if(isNaN(displayed)) displayed = 0;
+      if(liked){
+        setLikedLocal(id, false);
+        btn.classList.remove('liked');
+        countEl.textContent = Math.max(0, displayed - 1);
+        hitRemote(id, false).then(v=>{ if(typeof v === 'number') countEl.textContent = v; });
+      } else {
+        setLikedLocal(id, true);
+        btn.classList.add('liked');
+        btn.classList.remove('bump'); void btn.offsetWidth; btn.classList.add('bump');
+        countEl.textContent = displayed + 1;
+        hitRemote(id, true).then(v=>{ if(typeof v === 'number') countEl.textContent = v; });
+      }
+    });
+  }
+  function loadCountsForCategory(catKey){
+    if(fetchedCats.has(catKey)) return;
+    fetchedCats.add(catKey);
+    PROJECT_LINKS[catKey].forEach((entry, idx)=>{
+      if(!entry.link) return;
+      const id = likeId(catKey, idx);
+      fetchRemoteCount(id).then(count=>{
+        const el = document.querySelector(`.like-btn[data-like-id="${id}"] .like-count`);
+        if(el) el.textContent = count;
+      });
+    });
   }
 
   /* ── HELPERS ── */
@@ -539,7 +615,7 @@ footer{padding:44px 0 26px;}
 
   /* ── FILLED SLOT ── */
   function filledSlotHTML(entry, id){
-    const kind = entry.kind; // 'embed' | 'video'
+    const kind = entry.kind;
     let mediaEl;
     if(kind === 'embed'){
       mediaEl = `<iframe class="drive-frame" data-base-src="${toVideoEmbed(entry.link)}" src="${toVideoEmbed(entry.link)}" frameborder="0" allow="autoplay" allowfullscreen loading="lazy"></iframe><span class="play-chip">&#9658;</span>`;
@@ -564,13 +640,6 @@ footer{padding:44px 0 26px;}
       </div>`;
   }
 
-  function bindLike(wrap, id){
-    const btn = wrap.querySelector('.like-btn');
-    if(!btn) return;
-    const countEl = btn.querySelector('.like-count');
-    btn.addEventListener('click', e=>{ e.stopPropagation(); toggleLike(id, btn, countEl); });
-  }
-
   function bindEmbedHover(wrap){
     const media = wrap.querySelector('.slot-media');
     const frame = wrap.querySelector('.drive-frame');
@@ -578,16 +647,14 @@ footer{padding:44px 0 26px;}
     media.addEventListener('mouseenter', ()=>{ frame.src = withAutoplay(frame.dataset.baseSrc); });
     media.addEventListener('mouseleave', ()=>{ frame.src = frame.dataset.baseSrc; });
   }
-
   function bindNativeHover(wrap){
     const media = wrap.querySelector('.slot-media');
     const video = wrap.querySelector('.native-video');
     if(!media || !video) return;
     video.onloadedmetadata = ()=>{
-      const badge = wrap.querySelector('.ratio-badge');
       const dur = document.createElement('span');
       dur.className='duration-badge'; dur.textContent = fmtDuration(video.duration);
-      wrap.querySelector('.slot-media').appendChild(dur);
+      media.appendChild(dur);
     };
     if(!reduceMotion){
       media.addEventListener('mouseenter', ()=>video.play().catch(()=>{}));
@@ -637,26 +704,69 @@ footer{padding:44px 0 26px;}
     tabCountEl.textContent = filled + ' / ' + MAX_SLOTS + ' uploaded';
   }
 
-  const indicator = document.getElementById('tabsIndicator');
+  /* ── SWIPEABLE CATEGORY SWITCHER ── */
   const blurbEl = document.getElementById('categoryBlurb');
   const tabCountEl = document.getElementById('tabCount');
-  const tabs = Array.from(document.querySelectorAll('.tab'));
   const grids = Array.from(document.querySelectorAll('.cat-grid'));
+  const catSwitcher = document.getElementById('catSwitcher');
+  const catCards = Array.from(document.querySelectorAll('.cat-card'));
+  const catDotsWrap = document.getElementById('catDots');
+  const catPrev = document.getElementById('catPrev');
+  const catNext = document.getElementById('catNext');
   let activeCat = 'ai';
 
-  function positionIndicator(){
-    const a = document.querySelector('.tab.active'); if(!a) return;
-    indicator.style.width = a.offsetWidth+'px'; indicator.style.left = a.offsetLeft+'px';
-  }
-  function setActiveTab(key){
+  categories.forEach((c,i)=>{
+    const dot = document.createElement('span');
+    dot.className = 'cat-dot' + (i===0?' active':'');
+    dot.dataset.cat = c.key;
+    catDotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(document.querySelectorAll('.cat-dot'));
+
+  function setActiveTab(key, opts){
+    opts = opts || { scroll: true };
     activeCat = key;
-    tabs.forEach(t=>t.classList.toggle('active', t.dataset.cat===key));
+    catCards.forEach(c=>c.classList.toggle('active', c.dataset.cat===key));
+    dots.forEach(d=>d.classList.toggle('active', d.dataset.cat===key));
     grids.forEach(g=>g.classList.toggle('active', g.dataset.catGrid===key));
     blurbEl.textContent = categories.find(c=>c.key===key).blurb;
-    updateCount(key); positionIndicator();
+    updateCount(key);
+    loadCountsForCategory(key);
+    if(opts.scroll){
+      const card = catCards.find(c=>c.dataset.cat===key);
+      if(card) card.scrollIntoView({ behavior: reduceMotion?'auto':'smooth', inline:'center', block:'nearest' });
+    }
   }
-  tabs.forEach(t=>t.addEventListener('click', ()=>setActiveTab(t.dataset.cat)));
-  window.addEventListener('resize', positionIndicator);
+  catCards.forEach(c=>c.addEventListener('click', ()=>setActiveTab(c.dataset.cat)));
+  dots.forEach(d=>d.addEventListener('click', ()=>setActiveTab(d.dataset.cat)));
+
+  function closestCardToCenter(){
+    const wrapRect = catSwitcher.getBoundingClientRect();
+    const centerX = wrapRect.left + wrapRect.width/2;
+    let closest = null, minDist = Infinity;
+    catCards.forEach(c=>{
+      const r = c.getBoundingClientRect();
+      const dist = Math.abs((r.left + r.width/2) - centerX);
+      if(dist < minDist){ minDist = dist; closest = c; }
+    });
+    return closest;
+  }
+  let scrollDebounce;
+  catSwitcher.addEventListener('scroll', ()=>{
+    clearTimeout(scrollDebounce);
+    scrollDebounce = setTimeout(()=>{
+      const c = closestCardToCenter();
+      if(c && c.dataset.cat !== activeCat) setActiveTab(c.dataset.cat, { scroll:false });
+    }, 130);
+  });
+  catPrev.addEventListener('click', ()=>{
+    const idx = categories.findIndex(c=>c.key===activeCat);
+    setActiveTab(categories[(idx-1+categories.length)%categories.length].key);
+  });
+  catNext.addEventListener('click', ()=>{
+    const idx = categories.findIndex(c=>c.key===activeCat);
+    setActiveTab(categories[(idx+1)%categories.length].key);
+  });
 
   /* ── NAV ── */
   document.querySelectorAll('[data-target]').forEach(el=>{
@@ -768,8 +878,7 @@ footer{padding:44px 0 26px;}
 
   /* ── INIT ── */
   buildGrids();
-  setActiveTab('ai');
-  requestAnimationFrame(positionIndicator);
+  setActiveTab('ai', { scroll:false });
   if(SITE_CONFIG.brandIconLink) applyBrandIcon(SITE_CONFIG.brandIconLink);
   if(SITE_CONFIG.profilePhotoLink) applyProfilePhoto(SITE_CONFIG.profilePhotoLink);
 
