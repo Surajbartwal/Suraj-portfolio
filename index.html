@@ -37,6 +37,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
+/* ── SCROLL PROGRESS ── */
+#scrollProgress{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--gradient);z-index:1001;transition:width .1s linear;}
 body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 img,video{max-width:100%;display:block;}
 button,input{font-family:inherit;}
@@ -57,8 +59,11 @@ a{color:inherit;text-decoration:none;}
 .brand-icon img{width:100%;height:100%;object-fit:cover;display:block;}
 .brand-icon-placeholder{width:100%;height:100%;background:var(--gradient);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#06060e;letter-spacing:-.02em;}
 .nav-links{display:flex;gap:28px;}
-.nav-links a{font-size:.9rem;color:var(--text-dim);transition:color .2s;}
+.nav-links a{font-size:.9rem;color:var(--text-dim);transition:color .2s;position:relative;}
 .nav-links a:hover{color:var(--text);}
+.nav-links a.active{color:var(--text);}
+.nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;border-radius:2px;background:var(--gradient);}
+@media(max-width:760px){.nav-links a.active::after{display:none;}.nav-links a.active{background:rgba(139,92,246,0.08);}}
 .nav-right{display:flex;align-items:center;gap:12px;}
 .nav-toggle{display:none;font-size:1.4rem;padding:4px;}
 
@@ -98,6 +103,27 @@ section{padding:100px 0;position:relative;}
 h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spacing:-.015em;margin-bottom:10px;}
 .section-sub{color:var(--text-dim);font-size:.95rem;}
 
+/* ── FEATURED PROJECT ── */
+.featured-project{display:grid;grid-template-columns:1.1fr 1fr;gap:0;border-radius:var(--radius-xl);overflow:hidden;background:rgba(255,255,255,0.04);border:1px solid var(--border-mid);margin-bottom:36px;box-shadow:0 12px 44px rgba(0,0,0,0.4);}
+.featured-media{position:relative;aspect-ratio:16/9;background:#000;cursor:pointer;overflow:hidden;}
+.featured-media iframe,.featured-media video{width:100%;height:100%;border:none;object-fit:cover;}
+.featured-badge{position:absolute;top:12px;left:12px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--gradient);color:#06060e;z-index:2;}
+.featured-copy{padding:30px 32px;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+.featured-copy h3{font-size:1.3rem;font-weight:700;letter-spacing:-.01em;}
+.featured-copy p{color:var(--text-dim);font-size:.92rem;}
+.featured-copy .btn{align-self:flex-start;margin-top:6px;}
+@media(max-width:760px){.featured-project{grid-template-columns:1fr;}}
+
+/* ── FILTER PILLS ── */
+.filter-pills{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.filter-pill{font-size:.78rem;font-weight:600;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid var(--border-mid);color:var(--text-dim);transition:background .18s,border-color .18s,color .18s;}
+.filter-pill:hover{border-color:var(--border-strong);color:var(--text);}
+.filter-pill.active{background:linear-gradient(160deg,rgba(139,92,246,0.22),rgba(34,211,238,0.1));border-color:rgba(139,92,246,0.55);color:var(--text);}
+.tag-badge{position:absolute;top:10px;left:10px;font-size:.62rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);}
+.tag-badge.ai{background:linear-gradient(120deg,rgba(139,92,246,0.75),rgba(34,211,238,0.65));border-color:transparent;color:#06060e;}
+.upload-slot.filtered-out{display:none;}
+.slot-meta{display:block;font-size:.74rem;color:var(--text-faint);margin-top:1px;}
+
 /* ── SWIPEABLE CATEGORY SWITCHER ── */
 .cat-switcher-row{margin-bottom:14px;}
 .cat-switcher-wrap{display:flex;align-items:center;gap:8px;}
@@ -112,6 +138,10 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .cat-card-icon svg{width:18px;height:18px;}
 .cat-card.active .cat-card-icon{background:var(--gradient);color:#06060e;border-color:transparent;}
 .cat-card-label{font-size:.8rem;font-weight:600;text-align:center;line-height:1.3;}
+.cat-card{position:relative;}
+.cat-count-badge{position:absolute;top:10px;right:10px;font-size:.64rem;font-weight:700;color:var(--text-faint);background:rgba(255,255,255,0.06);border:1px solid var(--border-mid);border-radius:999px;padding:2px 7px;}
+.cat-card.active .cat-count-badge{color:var(--text-dim);}
+.cat-switcher:focus-visible{outline:2px solid var(--accent-3);outline-offset:4px;border-radius:12px;}
 .cat-dots{display:flex;justify-content:center;gap:7px;margin-bottom:10px;}
 .cat-dot{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,0.18);transition:background .22s,width .22s;}
 .cat-dot.active{background:var(--gradient);width:20px;}
@@ -119,7 +149,16 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 
 /* ── PROJECT GRID ── */
 .cat-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;}
-.cat-grid.active{display:grid;}
+.cat-grid.active{display:grid;animation:gridFadeIn .35s ease;}
+@keyframes gridFadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── SHIMMER / FALLBACK ── */
+.slot-media.loading{background:linear-gradient(100deg,rgba(255,255,255,0.03) 30%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.03) 70%);background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.media-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:rgba(255,255,255,0.03);color:var(--text-faint);}
+.media-fallback svg{width:20px;height:20px;}
+.media-fallback span{font-size:.8rem;}
+.media-fallback a{font-size:.78rem;font-weight:600;color:var(--accent-3);text-decoration:underline;}
 
 /* ── CARD SHELL ── */
 .upload-slot{border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;min-height:240px;position:relative;transition:border-color .25s,transform .25s,box-shadow .25s;}
@@ -138,27 +177,16 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .ratio-badge{position:absolute;top:10px;right:10px;font-size:.65rem;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,0.9);background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);padding:3px 8px;border-radius:6px;}
 .play-chip{position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;transition:transform .2s,background .2s;pointer-events:none;}
 .slot-media:hover .play-chip{transform:scale(1.15);background:rgba(139,92,246,0.7);}
-.duration-badge{position:absolute;bottom:10px;right:10px;font-size:.65rem;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:5px;}
-.slot-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(0,0,0,0);transition:background .25s;pointer-events:none;}
-.slot-media:hover .slot-overlay{background:rgba(0,0,0,0.32);}
-.overlay-btn{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.28);color:#fff;transform:scale(.7);opacity:0;transition:transform .22s,opacity .22s;pointer-events:all;cursor:pointer;}
+.duration-badge{position:absolute;bottom:10px;left:50px;font-size:.65rem;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:5px;}
+.slot-overlay{position:absolute;right:10px;bottom:10px;display:flex;gap:8px;z-index:2;}
+.overlay-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.28);color:#fff;transform:scale(.7);opacity:0;transition:transform .22s,opacity .22s,background .18s;pointer-events:all;cursor:pointer;}
 .slot-media:hover .overlay-btn{transform:scale(1);opacity:1;}
-.overlay-btn svg{width:16px;height:16px;}
+.overlay-btn:hover{background:rgba(139,92,246,0.75);}
+.overlay-btn svg{width:15px;height:15px;}
 
 /* ── SLOT FOOTER ── */
 .slot-foot{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
 .slot-title{flex:1;min-width:0;font-size:.86rem;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-
-/* ── LIKE BUTTON ── */
-.like-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid var(--border-mid);color:var(--text-dim);font-size:.78rem;font-weight:600;flex-shrink:0;transition:background .18s,border-color .18s,color .18s,transform .12s;}
-.like-btn:hover{border-color:rgba(251,113,133,0.5);color:var(--text);}
-.like-btn:active{transform:scale(.92);}
-.like-btn svg{width:14px;height:14px;flex-shrink:0;stroke:currentColor;fill:none;transition:fill .18s,stroke .18s,transform .18s;}
-.like-btn.liked{background:rgba(251,113,133,0.12);border-color:rgba(251,113,133,0.45);color:var(--like);}
-.like-btn.liked svg{fill:var(--like);stroke:var(--like);}
-.like-btn.bump svg{animation:likePop .32s ease;}
-@keyframes likePop{0%{transform:scale(1);}40%{transform:scale(1.35);}100%{transform:scale(1);}}
-.like-count{min-width:10px;text-align:left;}
 
 /* ── ABOUT ── */
 .about-grid{display:grid;grid-template-columns:260px 1fr;gap:52px;align-items:start;}
@@ -214,6 +242,10 @@ footer{padding:44px 0 26px;}
 .player-seek::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(139,92,246,0.4);}
 .player-time{font-size:.72rem;color:rgba(255,255,255,0.85);font-variant-numeric:tabular-nums;flex-shrink:0;}
 
+/* ── FLOATING CTA ── */
+.floating-cta{position:fixed;right:20px;bottom:20px;z-index:900;opacity:0;transform:translateY(14px) scale(.95);pointer-events:none;transition:opacity .25s ease,transform .25s ease;box-shadow:0 10px 34px rgba(139,92,246,0.45);}
+.floating-cta.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
+
 /* ── RESPONSIVE ── */
 @media(max-width:860px){.about-grid{grid-template-columns:1fr;}.about-photo{max-width:240px;}}
 @media(max-width:760px){
@@ -223,13 +255,18 @@ footer{padding:44px 0 26px;}
   .nav-toggle{display:block;}
   .nav-right .btn-sm{display:none;}
   .cat-nav-arrow{display:none;}
+  .modal-ctrl-btn{width:42px;height:42px;}
+  .modal-ctrl-btn svg{width:18px;height:18px;}
+  .overlay-btn{width:42px;height:42px;}
+  .floating-cta{right:14px;bottom:14px;}
 }
 @media(max-width:640px){section{padding:70px 0;}.contact-card{padding:50px 22px;}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}.cat-grid.active{animation:none;}.slot-media.loading{animation:none;}}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#work">Skip to content</a>
+<div id="scrollProgress"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -265,7 +302,8 @@ footer{padding:44px 0 26px;}
       <a class="btn btn-glass" href="#contact" data-target="#contact">Get in touch</a>
     </div>
     <div class="hero-stats">
-      <span><b>4</b> categories</span><span><b>24</b> project slots</span><span>AI-assisted workflow</span>
+      <!-- Edit these three to real numbers/claims whenever you have them -->
+      <span><b>3+ yrs</b> experience</span><span><b>AI-assisted</b> workflow</span><span>Based in <b>Delhi, India</b></span>
     </div>
   </div>
 </header>
@@ -279,25 +317,27 @@ footer{padding:44px 0 26px;}
       <p class="section-sub" id="categoryBlurb">Visuals generated with AI tools, composited and finished by hand.</p>
     </div>
 
+    <div id="featuredProjectWrap"></div>
+
     <div class="cat-switcher-row">
       <div class="cat-switcher-wrap">
         <button class="cat-nav-arrow" id="catPrev" aria-label="Previous category">‹</button>
         <div class="cat-switcher" id="catSwitcher">
-          <button class="cat-card active" data-cat="ai">
-            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></span>
-            <span class="cat-card-label">AI Generated</span>
-          </button>
-          <button class="cat-card" data-cat="saas">
-            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
-            <span class="cat-card-label">SaaS Video</span>
-          </button>
-          <button class="cat-card" data-cat="longform">
+          <button class="cat-card active" data-cat="longform">
             <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/></svg></span>
             <span class="cat-card-label">Long-Form Explainer</span>
           </button>
           <button class="cat-card" data-cat="shortform">
             <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span>
             <span class="cat-card-label">Short-Form Explainer</span>
+          </button>
+          <button class="cat-card" data-cat="ai">
+            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></span>
+            <span class="cat-card-label">AI Generated</span>
+          </button>
+          <button class="cat-card" data-cat="saas">
+            <span class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+            <span class="cat-card-label">SaaS Video</span>
           </button>
         </div>
         <button class="cat-nav-arrow" id="catNext" aria-label="Next category">›</button>
@@ -306,10 +346,16 @@ footer{padding:44px 0 26px;}
       <span class="tab-count" id="tabCount">0 / 6 uploaded</span>
     </div>
 
-    <div class="cat-grid active" data-cat-grid="ai" id="grid-ai"></div>
-    <div class="cat-grid" data-cat-grid="saas" id="grid-saas"></div>
-    <div class="cat-grid" data-cat-grid="longform" id="grid-longform"></div>
+    <div class="filter-pills" id="filterPills">
+      <button type="button" class="filter-pill active" data-filter="all">All</button>
+      <button type="button" class="filter-pill" data-filter="ai">AI-Generated</button>
+      <button type="button" class="filter-pill" data-filter="traditional">Traditional Edit</button>
+    </div>
+
+    <div class="cat-grid active" data-cat-grid="longform" id="grid-longform"></div>
     <div class="cat-grid" data-cat-grid="shortform" id="grid-shortform"></div>
+    <div class="cat-grid" data-cat-grid="ai" id="grid-ai"></div>
+    <div class="cat-grid" data-cat-grid="saas" id="grid-saas"></div>
   </div>
 </section>
 
@@ -339,10 +385,38 @@ footer{padding:44px 0 26px;}
           <span class="chip">Technical Videos</span>
           <span class="chip">Commerical video</span>
         </div>
+        <!-- Trust badges: swap these for real credentials (e.g. "Upwork Top Rated") whenever you have them -->
+        <div class="chip-row" style="margin-top:10px;">
+          <span class="chip">Oodles Technology</span>
+          <span class="chip">V2Infotech</span>
+          <span class="chip">Upwork Freelancer</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- TESTIMONIALS — currently disabled to avoid showing placeholder/fake quotes.
+     When you have real client feedback, remove this comment wrapper and fill
+     in the blanks. Example structure:
+
+<section id="testimonials">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow grad-text">TESTIMONIALS</span>
+      <h2 class="section-title">What clients say</h2>
+    </div>
+    <div class="testimonials-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;">
+      <div class="chip" style="display:block;padding:22px;border-radius:16px;">
+        <p style="color:var(--text-dim);margin-bottom:12px;">"Quote from the client goes here."</p>
+        <strong>Client Name</strong><br><span style="color:var(--text-faint);font-size:.8rem;">Role, Company</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+-->
+
 
 <!-- TOOLS -->
 <section id="stack">
@@ -365,7 +439,8 @@ footer{padding:44px 0 26px;}
       <p>Seeking full-time opportunities as a Video Editor and Motion Graphics Designer. Also available for freelance projects and long-term collaborations. Typically responds within 24 hours.</p>
       <div class="cta-row">
         <a class="btn btn-dark" href="mailto:surajbartwal101@gmail.com">Email Me</a>
-        <a class="btn btn-glass" href="https://drive.google.com/file/d/1jaxuIa1ZkGgL5Vd7zo6RLWl1KHU4fKlz/preview" style="color:#06060e;border-color:rgba(6,6,14,0.35);">Download Resume</a>
+        <a class="btn btn-glass" href="https://drive.google.com/file/d/1jaxuIa1ZkGgL5Vd7zo6RLWl1KHU4fKlz/preview" style="color:#06060e;border-color:rgba(6,6,14,0.35);">View Resume</a>
+        <a class="btn btn-glass" href="https://drive.google.com/uc?export=download&amp;id=1jaxuIa1ZkGgL5Vd7zo6RLWl1KHU4fKlz" style="color:#06060e;border-color:rgba(6,6,14,0.35);">Download PDF</a>
       </div>
     </div>
   </div>
@@ -407,6 +482,9 @@ footer{padding:44px 0 26px;}
   </div>
 </div>
 
+<!-- FLOATING CTA -->
+<a class="btn btn-grad floating-cta" id="floatingCta" href="mailto:surajbartwal101@gmail.com">Hire me</a>
+
 <script>
 (function(){
   'use strict';
@@ -420,71 +498,78 @@ footer{padding:44px 0 26px;}
      SITE_CONFIG.brandIconLink   → nav logo + browser tab favicon
      SITE_CONFIG.profilePhotoLink → About section headshot
 
-     PROJECT_LINKS.<category>[slot] → { title, link }
+     PROJECT_LINKS.<category>[slot] → { title, link, tag, meta }
        - Google Drive share link  → embed, autoplay-on-hover/click,
          opens Google's own player in the modal.
        - Direct video file URL (.mp4/.webm/.mov) → switches to the
          built-in custom player: hover/click autoplay + a minimal
          control bar (play/pause, seek, mute) that auto-hides while
-         playing and reappears on tap/mousemove.
+         playing and reappears on tap/mousemove. Useful if you want
+         to self-host a couple of flagship reels on a CDN instead of
+         Google Drive for faster, more reliable playback.
        - Leave "link" empty ('') to show a "Coming soon" slot.
+       - tag: 'ai' or 'traditional' — powers the filter pills above the grid.
+       - meta: short one-line caption shown under the title (tools used,
+         result, etc). Leave '' to hide it.
 
-     ★ LIKES: powered by countapi.xyz, a free public counter API —
-       no signup needed, but it's a third-party service and can
-       occasionally be slow or unavailable. Counts are shared by
-       every visitor to the site (true global total), keyed by
-       LIKES_NAMESPACE + the project's id. Change LIKES_NAMESPACE
-       below if you ever want to reset all counts to zero.
+     FEATURED_PROJECT → picks one entry above to spotlight at the top
+       of the Work section. Set to null to hide it entirely.
      ============================================================== */
   const SITE_CONFIG = {
     brandIconLink: 'https://drive.google.com/file/d/1RO_rFDUqr5buUsKSwB-cAP2FnbBuw0JN/preview',
     profilePhotoLink: 'https://drive.google.com/file/d/1CbU0bMw47duakkvSp3g1D5c9IiN2xti_/preview',
   };
 
-  const LIKES_NAMESPACE = 'surajbartwal-portfolio-2026';
-
   const PROJECT_LINKS = {
     ai: [
-      { title: 'Job Search Ad', link: 'https://drive.google.com/file/d/1SuVqf7DJz9ivEwWyoSIhSACkUiVwt8Wn/preview' },
-      { title: 'AI Candy Ad', link: 'https://drive.google.com/file/d/1-3RqVKswi-BlZ0XMivLqal-Q5MKHvk9v/preview' },
-      { title: 'Gym Ad', link: 'https://drive.google.com/file/d/1aOO0ybqhwjjlMVpcCD-oCdgwa1JM4a3v/preview' },
-      { title: 'UGC AI Ad', link: 'https://drive.google.com/file/d/1oQ1kqWHNW0tfJtA3-FXQWnoAfKjEKOUm/preview' },
-      { title: 'AI Family', link: 'https://drive.google.com/file/d/1BrcIOptQAF--8ibfpIBUCg9yGdWvSZGz/preview' },
-      { title: 'HDFC Ad Trial', link: 'https://drive.google.com/file/d/1RgdtvqUAmUVTEjqXagVmLfGc-XqMYMbj/preview' },
+      { title: 'Job Search Ad', link: 'https://drive.google.com/file/d/1SuVqf7DJz9ivEwWyoSIhSACkUiVwt8Wn/preview', tag:'ai', meta:'AI-generated · composited in After Effects' },
+      { title: 'AI Candy Ad', link: 'https://drive.google.com/file/d/1-3RqVKswi-BlZ0XMivLqal-Q5MKHvk9v/preview', tag:'ai', meta:'Kling AI · Nano Banana' },
+      { title: 'Gym Ad', link: 'https://drive.google.com/file/d/1aOO0ybqhwjjlMVpcCD-oCdgwa1JM4a3v/preview', tag:'ai', meta:'Veo 3 · Premiere Pro finish' },
+      { title: 'UGC AI Ad', link: 'https://drive.google.com/file/d/1oQ1kqWHNW0tfJtA3-FXQWnoAfKjEKOUm/preview', tag:'ai', meta:'AI-generated UGC style' },
+      { title: 'AI Family', link: 'https://drive.google.com/file/d/1BrcIOptQAF--8ibfpIBUCg9yGdWvSZGz/preview', tag:'ai', meta:'Seedream · Nano Banana' },
+      { title: 'HDFC Ad Trial', link: 'https://drive.google.com/file/d/1RgdtvqUAmUVTEjqXagVmLfGc-XqMYMbj/preview', tag:'ai', meta:'AI concept ad trial' },
     ],
     saas: [
-      { title: 'AY Connect', link: 'https://drive.google.com/file/d/1FTOhlh3xEteJB1y3y9NL1-lTGMD8Ew2t/preview' },
-      { title: 'Allergy App', link: 'https://drive.google.com/file/d/1KNGoBnOHBdnshmEbo8siXRsQP0mUm6CC/preview' },
-      { title: 'Project 3', link: '' },
-      { title: 'Project 4', link: '' },
-      { title: 'Project 5', link: '' },
-      { title: 'Project 6', link: '' },
+      { title: 'AY Connect', link: 'https://drive.google.com/file/d/1FTOhlh3xEteJB1y3y9NL1-lTGMD8Ew2t/preview', tag:'traditional', meta:'Product walkthrough · Premiere Pro' },
+      { title: 'Allergy App', link: 'https://drive.google.com/file/d/1KNGoBnOHBdnshmEbo8siXRsQP0mUm6CC/preview', tag:'traditional', meta:'Feature explainer · After Effects' },
+      { title: 'Project 3', link: '', tag:'traditional', meta:'' },
+      { title: 'Project 4', link: '', tag:'traditional', meta:'' },
+      { title: 'Project 5', link: '', tag:'traditional', meta:'' },
+      { title: 'Project 6', link: '', tag:'traditional', meta:'' },
     ],
     longform: [
-      { title: 'Case Study 1', link: 'https://drive.google.com/file/d/1L1krnL6UqOVFAzUQpcrXyJrL1TE-Uc34/preview' },
-      { title: 'App Case Study', link: 'https://drive.google.com/file/d/1R_rJ5mdcV2d6QxCzA-OmVSPeH9eWgJyH/preview' },
-      { title: 'Live SME Explainer', link: 'https://drive.google.com/file/d/1WZnjTzwDXDcnvXcGB_YyTcy7F6_LUUKd/preview' },
-      { title: 'Messy AI', link: 'https://drive.google.com/file/d/1apDTMzvYPeioMhXCXV-DheifiM3SK4dC/preview' },
-      { title: 'Case Study 2', link: 'https://drive.google.com/file/d/1Qz3P8SdZCIwoeo0l4-6OMlJW2kvfmVcx/preview' },
-      { title: 'Case Study 3', link: 'https://drive.google.com/file/d/1spAwgo5gN_YA2tH3xxILlv20ysXoG4_g/preview' },
+      { title: 'Case Study 1', link: 'https://drive.google.com/file/d/1L1krnL6UqOVFAzUQpcrXyJrL1TE-Uc34/preview', tag:'traditional', meta:'Full case-study walkthrough' },
+      { title: 'App Case Study', link: 'https://drive.google.com/file/d/1R_rJ5mdcV2d6QxCzA-OmVSPeH9eWgJyH/preview', tag:'traditional', meta:'App onboarding, before → after' },
+      { title: 'Live SME Explainer', link: 'https://drive.google.com/file/d/1WZnjTzwDXDcnvXcGB_YyTcy7F6_LUUKd/preview', tag:'traditional', meta:'Live-shot SME explainer' },
+      { title: 'Messy AI', link: 'https://drive.google.com/file/d/1apDTMzvYPeioMhXCXV-DheifiM3SK4dC/preview', tag:'ai', meta:'AI b-roll, cleaned up in edit' },
+      { title: 'Case Study 2', link: 'https://drive.google.com/file/d/1Qz3P8SdZCIwoeo0l4-6OMlJW2kvfmVcx/preview', tag:'traditional', meta:'Client case study' },
+      { title: 'Case Study 3', link: 'https://drive.google.com/file/d/1spAwgo5gN_YA2tH3xxILlv20ysXoG4_g/preview', tag:'traditional', meta:'Client case study' },
     ],
     shortform: [
-      { title: 'Game Devlopment', link: 'https://drive.google.com/file/d/1OgChI2tEyBPHTgfCOijv4c7WUV4o6QUP/preview' },
-      { title: 'odoo shorts', link: 'https://drive.google.com/file/d/1T2lA3w0x06FK9IPRKphjPZDee_b49yv5/preview' },
-      { title: 'Soap Ad', link: 'https://drive.google.com/file/d/1aI_7zrXjFkRFh0YDnK93Cp6WhyCKbLY0/preview' },
-      { title: 'reel', link: 'https://drive.google.com/file/d/1e04BblffICXdlPSPDX3Z6BxVIqfOD-oX/preview' },
-      { title: '3D Modeling', link: 'https://drive.google.com/file/d/1Lbjr0UYAwW23Lw9JYtUcW4cNiYclZalK/preview' },
-      { title: 'ERP Shorts', link: 'https://drive.google.com/file/d/1nFr3q9sr3rNhV_F3rTOXN0Sb0a_htUp3/preview' },
+      { title: 'Game Devlopment', link: 'https://drive.google.com/file/d/1OgChI2tEyBPHTgfCOijv4c7WUV4o6QUP/preview', tag:'traditional', meta:'Caption-led short cut' },
+      { title: 'odoo shorts', link: 'https://drive.google.com/file/d/1T2lA3w0x06FK9IPRKphjPZDee_b49yv5/preview', tag:'traditional', meta:'Feature-focused short' },
+      { title: 'Soap Ad', link: 'https://drive.google.com/file/d/1aI_7zrXjFkRFh0YDnK93Cp6WhyCKbLY0/preview', tag:'traditional', meta:'Product short ad' },
+      { title: 'reel', link: 'https://drive.google.com/file/d/1e04BblffICXdlPSPDX3Z6BxVIqfOD-oX/preview', tag:'traditional', meta:'Social reel cut' },
+      { title: '3D Modeling', link: 'https://drive.google.com/file/d/1Lbjr0UYAwW23Lw9JYtUcW4cNiYclZalK/preview', tag:'ai', meta:'3D render showcase' },
+      { title: 'ERP Shorts', link: 'https://drive.google.com/file/d/1nFr3q9sr3rNhV_F3rTOXN0Sb0a_htUp3/preview', tag:'traditional', meta:'ERP feature short' },
     ]
   };
 
+  const FEATURED_PROJECT = {
+    category: 'longform',
+    index: 0,
+    blurb: 'A full case-study walkthrough — from raw footage and messy AI b-roll to a polished narrative built for a client landing page.'
+  };
+
   const categories = [
-    { key:'ai',        label:'AI Generated',        blurb:'Visuals generated with AI tools like Kling, Veo 3, Nano Banana and Seedream — composited and finished by hand.' },
-    { key:'saas',      label:'SaaS Video',           blurb:'Product walkthroughs, feature explainers and onboarding clips built for SaaS teams.' },
     { key:'longform',  label:'Long-Form Explainer',  blurb:'Narrative-driven explainers and brand stories edited for YouTube, webinars and landing pages.' },
-    { key:'shortform', label:'Short-Form Explainer', blurb:'Punchy, caption-led cuts built for Reels, Shorts and TikTok.' }
+    { key:'shortform', label:'Short-Form Explainer', blurb:'Punchy, caption-led cuts built for Reels, Shorts and TikTok.' },
+    { key:'ai',        label:'AI Generated',        blurb:'Visuals generated with AI tools like Kling, Veo 3, Nano Banana and Seedream — composited and finished by hand.' },
+    { key:'saas',      label:'SaaS Video',           blurb:'Product walkthroughs, feature explainers and onboarding clips built for SaaS teams.' }
   ];
   const MAX_SLOTS = 6;
+  let currentFilter = 'all';
+  const renderedCats = new Set();
 
   /* ── URL HELPERS ── */
   function isDirectVideo(url){ return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url); }
@@ -525,78 +610,6 @@ footer{padding:44px 0 26px;}
     if(wrap) wrap.innerHTML = `<img src="${imgUrl}" alt="Suraj Singh Bartwal" onerror="this.parentElement.innerHTML='<span>Could not load image.<br>Check the link is public.</span>'">`;
   }
 
-  /* ── GLOBAL LIKES via countapi.xyz ── */
-  const COUNTAPI_BASE = 'https://api.countapi.xyz';
-  const remoteCache = {};   // id -> resolved global count
-  const fetchedCats = new Set();
-
-  function likeId(catKey, idx){ return catKey + '-' + idx; }
-  function getLikedLocal(id){ return localStorage.getItem('spb_liked_' + id) === '1'; }
-  function setLikedLocal(id, val){ localStorage.setItem('spb_liked_' + id, val ? '1' : '0'); }
-
-  async function fetchRemoteCount(id){
-    try{
-      const res = await fetch(`${COUNTAPI_BASE}/get/${LIKES_NAMESPACE}/${id}`);
-      if(!res.ok) throw new Error('missing');
-      const data = await res.json();
-      remoteCache[id] = data.value || 0;
-    } catch(e){
-      remoteCache[id] = remoteCache[id] || 0;
-    }
-    return remoteCache[id];
-  }
-  async function hitRemote(id, up){
-    try{
-      const path = up ? `hit/${LIKES_NAMESPACE}/${id}` : `update/${LIKES_NAMESPACE}/${id}?amount=-1`;
-      const res = await fetch(`${COUNTAPI_BASE}/${path}`);
-      const data = await res.json();
-      if(typeof data.value === 'number') remoteCache[id] = Math.max(0, data.value);
-    } catch(e){ /* offline / API hiccup — keep optimistic local value */ }
-    return remoteCache[id];
-  }
-
-  function likeButtonHTML(id){
-    const liked = getLikedLocal(id);
-    return `<button type="button" class="like-btn${liked?' liked':''}" data-like-id="${id}" aria-label="Like this project">
-      <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 20.5s-7.5-4.6-10-9.3C.6 8 2 4.5 5.5 4c2-.3 3.7.7 5 2.3C11.8 4.7 13.5 3.7 15.5 4c3.5.5 4.9 4 3.5 7.2-2.5 4.7-10 9.3-10 9.3z"/></svg>
-      <span class="like-count">–</span>
-    </button>`;
-  }
-  function bindLike(wrap, id){
-    const btn = wrap.querySelector('.like-btn');
-    if(!btn) return;
-    const countEl = btn.querySelector('.like-count');
-    btn.addEventListener('click', e=>{
-      e.stopPropagation();
-      const liked = getLikedLocal(id);
-      let displayed = parseInt(countEl.textContent, 10); if(isNaN(displayed)) displayed = 0;
-      if(liked){
-        setLikedLocal(id, false);
-        btn.classList.remove('liked');
-        countEl.textContent = Math.max(0, displayed - 1);
-        hitRemote(id, false).then(v=>{ if(typeof v === 'number') countEl.textContent = v; });
-      } else {
-        setLikedLocal(id, true);
-        btn.classList.add('liked');
-        btn.classList.remove('bump'); void btn.offsetWidth; btn.classList.add('bump');
-        countEl.textContent = displayed + 1;
-        hitRemote(id, true).then(v=>{ if(typeof v === 'number') countEl.textContent = v; });
-      }
-    });
-  }
-  function loadCountsForCategory(catKey){
-    if(fetchedCats.has(catKey)) return;
-    fetchedCats.add(catKey);
-    PROJECT_LINKS[catKey].forEach((entry, idx)=>{
-      if(!entry.link) return;
-      const id = likeId(catKey, idx);
-      fetchRemoteCount(id).then(count=>{
-        const el = document.querySelector(`.like-btn[data-like-id="${id}"] .like-count`);
-        if(el) el.textContent = count;
-      });
-    });
-  }
-
   /* ── HELPERS ── */
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function fmtDuration(s){
@@ -613,8 +626,24 @@ footer{padding:44px 0 26px;}
     </div>`;
   }
 
+  /* ── LOADING SKELETON (shown briefly for lazy categories) ── */
+  function loadingSlotHTML(){
+    return `<div class="slot-media loading"></div>
+      <div class="slot-foot"><span class="slot-title">Loading…</span></div>`;
+  }
+
+  /* ── FALLBACK (embed failed to load in time) ── */
+  function fallbackHTML(entry){
+    const viewUrl = (entry.link||'').replace('/preview','/view');
+    return `<div class="media-fallback">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.86a2 2 0 0 0-3.4 0z"/></svg>
+      <span>Preview is slow to load right now.</span>
+      <a href="${viewUrl}" target="_blank" rel="noopener">Open in Google Drive ↗</a>
+    </div>`;
+  }
+
   /* ── FILLED SLOT ── */
-  function filledSlotHTML(entry, id){
+  function filledSlotHTML(entry){
     const kind = entry.kind;
     let mediaEl;
     if(kind === 'embed'){
@@ -622,8 +651,11 @@ footer{padding:44px 0 26px;}
     } else {
       mediaEl = `<video class="native-video" src="${entry.link}" muted loop playsinline preload="metadata"></video><span class="play-chip">&#9658;</span>`;
     }
-    return `<div class="slot-media">
+    const tagLabel = entry.tag === 'ai' ? 'AI' : 'Edit';
+    const metaLine = entry.meta ? `<span class="slot-meta">${escapeHtml(entry.meta)}</span>` : '';
+    return `<div class="slot-media loading">
         ${mediaEl}
+        <span class="tag-badge${entry.tag==='ai'?' ai':''}">${tagLabel}</span>
         <span class="ratio-badge">16:9</span>
         <div class="slot-overlay">
           <button type="button" class="overlay-btn preview-open-btn" title="Preview">
@@ -635,8 +667,7 @@ footer{padding:44px 0 26px;}
         </div>
       </div>
       <div class="slot-foot">
-        <span class="slot-title">${escapeHtml(entry.title||'Untitled project')}</span>
-        ${likeButtonHTML(id)}
+        <span class="slot-title">${escapeHtml(entry.title||'Untitled project')}${metaLine}</span>
       </div>`;
   }
 
@@ -662,9 +693,31 @@ footer{padding:44px 0 26px;}
     }
   }
 
+  /* Removes the shimmer once media is ready; shows a fallback if it never loads. */
+  function watchMediaLoad(wrap, entry, kind){
+    const media = wrap.querySelector('.slot-media');
+    if(!media) return;
+    let loaded = false;
+    function markLoaded(){ loaded = true; media.classList.remove('loading'); }
+    if(kind === 'embed'){
+      const frame = media.querySelector('.drive-frame');
+      if(frame) frame.addEventListener('load', markLoaded, { once:true });
+    } else {
+      const video = media.querySelector('.native-video');
+      if(video) video.addEventListener('loadeddata', markLoaded, { once:true });
+    }
+    setTimeout(()=>{
+      if(!loaded){
+        media.classList.remove('loading');
+        media.innerHTML = fallbackHTML(entry);
+      }
+    }, 9000);
+  }
+
   function renderSlot(catKey, idx, entry){
     const wrap = document.querySelector(`.upload-slot[data-cat="${catKey}"][data-idx="${idx}"]`);
-    const id = likeId(catKey, idx);
+    if(!wrap) return;
+    wrap.dataset.tag = entry && entry.tag ? entry.tag : '';
     if(!entry || !entry.link){
       wrap.className = 'upload-slot empty';
       wrap.innerHTML = emptySlotHTML();
@@ -673,9 +726,9 @@ footer{padding:44px 0 26px;}
     const kind = isDirectVideo(entry.link) ? 'video' : 'embed';
     const fullEntry = { ...entry, kind };
     wrap.className = 'upload-slot filled';
-    wrap.innerHTML = filledSlotHTML(fullEntry, id);
-    bindLike(wrap, id);
+    wrap.innerHTML = filledSlotHTML(fullEntry);
     if(kind === 'embed') bindEmbedHover(wrap); else bindNativeHover(wrap);
+    watchMediaLoad(wrap, fullEntry, kind);
 
     const previewBtn = wrap.querySelector('.preview-open-btn');
     const fsBtn = wrap.querySelector('.fullscreen-open-btn');
@@ -685,23 +738,90 @@ footer{padding:44px 0 26px;}
     if(media) media.addEventListener('click', ()=>openModal(fullEntry, false));
   }
 
+  /* Builds empty skeleton shells for every category up front, but only
+     renders real embeds/video for the active category. Other categories
+     render lazily the first time their tab is opened — keeps initial
+     iframe count (and load) low. */
   function buildGrids(){
     categories.forEach(cat=>{
       const grid = document.getElementById('grid-'+cat.key);
       for(let i=0;i<MAX_SLOTS;i++){
         const wrap = document.createElement('div');
         wrap.className='upload-slot empty'; wrap.dataset.cat=cat.key; wrap.dataset.idx=i;
-        wrap.innerHTML = emptySlotHTML();
+        const entry = PROJECT_LINKS[cat.key][i];
+        wrap.innerHTML = (entry && entry.link) ? loadingSlotHTML() : emptySlotHTML();
         grid.appendChild(wrap);
       }
     });
-    categories.forEach(cat=>{
-      PROJECT_LINKS[cat.key].forEach((entry, i)=>renderSlot(cat.key, i, entry));
-    });
+  }
+  function renderCategoryContent(catKey){
+    if(renderedCats.has(catKey)) return;
+    renderedCats.add(catKey);
+    PROJECT_LINKS[catKey].forEach((entry, i)=>renderSlot(catKey, i, entry));
   }
   function updateCount(catKey){
     const filled = PROJECT_LINKS[catKey].filter(e=>e.link).length;
     tabCountEl.textContent = filled + ' / ' + MAX_SLOTS + ' uploaded';
+  }
+  function updateCategoryBadges(){
+    categories.forEach(cat=>{
+      const count = PROJECT_LINKS[cat.key].filter(e=>e.link).length;
+      const card = document.querySelector(`.cat-card[data-cat="${cat.key}"]`);
+      if(!card) return;
+      const badge = document.createElement('span');
+      badge.className = 'cat-count-badge';
+      badge.textContent = count;
+      card.appendChild(badge);
+    });
+  }
+
+  /* ── FILTER PILLS (AI-Generated vs Traditional Edit) ── */
+  function applyFilter(){
+    document.querySelectorAll('.upload-slot').forEach(wrap=>{
+      if(currentFilter === 'all'){
+        wrap.classList.remove('filtered-out');
+        return;
+      }
+      const isEmpty = wrap.classList.contains('empty');
+      const matches = wrap.dataset.tag === currentFilter;
+      wrap.classList.toggle('filtered-out', isEmpty || !matches);
+    });
+  }
+  function bindFilterPills(){
+    document.querySelectorAll('.filter-pill').forEach(pill=>{
+      pill.addEventListener('click', ()=>{
+        currentFilter = pill.dataset.filter;
+        document.querySelectorAll('.filter-pill').forEach(p=>p.classList.toggle('active', p===pill));
+        applyFilter();
+      });
+    });
+  }
+
+  /* ── FEATURED PROJECT ── */
+  function renderFeaturedProject(){
+    if(!FEATURED_PROJECT) return;
+    const entry = (PROJECT_LINKS[FEATURED_PROJECT.category]||[])[FEATURED_PROJECT.index];
+    const wrap = document.getElementById('featuredProjectWrap');
+    if(!entry || !entry.link || !wrap) return;
+    const kind = isDirectVideo(entry.link) ? 'video' : 'embed';
+    const mediaEl = kind === 'embed'
+      ? `<iframe data-base-src="${toVideoEmbed(entry.link)}" src="${toVideoEmbed(entry.link)}" frameborder="0" allow="autoplay" allowfullscreen loading="lazy"></iframe>`
+      : `<video src="${entry.link}" muted loop playsinline preload="metadata"></video>`;
+    wrap.innerHTML = `<div class="featured-project">
+        <div class="featured-media" id="featuredMedia">
+          <span class="featured-badge">Featured</span>
+          ${mediaEl}
+        </div>
+        <div class="featured-copy">
+          <span class="eyebrow grad-text" style="font-size:.7rem;">${categories.find(c=>c.key===FEATURED_PROJECT.category)?.label || ''}</span>
+          <h3>${escapeHtml(entry.title||'Featured project')}</h3>
+          <p>${escapeHtml(FEATURED_PROJECT.blurb||'')}</p>
+          <button type="button" class="btn btn-grad" id="featuredOpenBtn">Watch project</button>
+        </div>
+      </div>`;
+    const openFeatured = ()=>openModal({ ...entry, kind }, false);
+    document.getElementById('featuredMedia').addEventListener('click', openFeatured);
+    document.getElementById('featuredOpenBtn').addEventListener('click', openFeatured);
   }
 
   /* ── SWIPEABLE CATEGORY SWITCHER ── */
@@ -713,7 +833,7 @@ footer{padding:44px 0 26px;}
   const catDotsWrap = document.getElementById('catDots');
   const catPrev = document.getElementById('catPrev');
   const catNext = document.getElementById('catNext');
-  let activeCat = 'ai';
+  let activeCat = 'longform';
 
   categories.forEach((c,i)=>{
     const dot = document.createElement('span');
@@ -726,12 +846,13 @@ footer{padding:44px 0 26px;}
   function setActiveTab(key, opts){
     opts = opts || { scroll: true };
     activeCat = key;
+    renderCategoryContent(key);
     catCards.forEach(c=>c.classList.toggle('active', c.dataset.cat===key));
     dots.forEach(d=>d.classList.toggle('active', d.dataset.cat===key));
     grids.forEach(g=>g.classList.toggle('active', g.dataset.catGrid===key));
     blurbEl.textContent = categories.find(c=>c.key===key).blurb;
     updateCount(key);
-    loadCountsForCategory(key);
+    applyFilter();
     if(opts.scroll){
       const card = catCards.find(c=>c.dataset.cat===key);
       if(card) card.scrollIntoView({ behavior: reduceMotion?'auto':'smooth', inline:'center', block:'nearest' });
@@ -739,6 +860,13 @@ footer{padding:44px 0 26px;}
   }
   catCards.forEach(c=>c.addEventListener('click', ()=>setActiveTab(c.dataset.cat)));
   dots.forEach(d=>d.addEventListener('click', ()=>setActiveTab(d.dataset.cat)));
+
+  /* Keyboard navigation for the category switcher */
+  catSwitcher.setAttribute('tabindex','0');
+  catSwitcher.addEventListener('keydown', e=>{
+    if(e.key === 'ArrowRight'){ e.preventDefault(); catNext.click(); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); catPrev.click(); }
+  });
 
   function closestCardToCenter(){
     const wrapRect = catSwitcher.getBoundingClientRect();
@@ -876,9 +1004,58 @@ footer{padding:44px 0 26px;}
   modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
   document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
 
+  /* ── SCROLL PROGRESS BAR ── */
+  const scrollProgressEl = document.getElementById('scrollProgress');
+  function updateScrollProgress(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const pct = max > 0 ? (scrollTop / max) * 100 : 0;
+    if(scrollProgressEl) scrollProgressEl.style.width = pct + '%';
+  }
+
+  /* ── ACTIVE NAV LINK ON SCROLL ── */
+  const navSections = ['hero','work','about','stack','contact']
+    .map(id=>document.getElementById(id)).filter(Boolean);
+  const navLinkEls = Array.from(document.querySelectorAll('.nav-links a[data-target]'));
+  const navObserver = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = '#' + entry.target.id;
+        navLinkEls.forEach(a=>a.classList.toggle('active', a.getAttribute('data-target')===id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+  navSections.forEach(sec=>navObserver.observe(sec));
+
+  /* ── FLOATING "HIRE ME" CTA ── */
+  const floatingCta = document.getElementById('floatingCta');
+  const heroEl = document.getElementById('hero');
+  function updateFloatingCta(){
+    if(!floatingCta || !heroEl) return;
+    const past = window.scrollY > heroEl.offsetHeight;
+    floatingCta.classList.toggle('visible', past);
+  }
+
+  let scrollRaf = null;
+  function onScroll(){
+    if(scrollRaf) return;
+    scrollRaf = requestAnimationFrame(()=>{
+      updateScrollProgress();
+      updateFloatingCta();
+      scrollRaf = null;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+
   /* ── INIT ── */
   buildGrids();
-  setActiveTab('ai', { scroll:false });
+  updateCategoryBadges();
+  bindFilterPills();
+  renderFeaturedProject();
+  setActiveTab('longform', { scroll:false });
+  updateScrollProgress();
+  updateFloatingCta();
   if(SITE_CONFIG.brandIconLink) applyBrandIcon(SITE_CONFIG.brandIconLink);
   if(SITE_CONFIG.profilePhotoLink) applyProfilePhoto(SITE_CONFIG.profilePhotoLink);
 
