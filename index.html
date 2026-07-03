@@ -168,6 +168,8 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .slot-placeholder span{font-size:.85rem;font-weight:600;color:var(--text-faint);}
 .upload-slot.filled{background:rgba(255,255,255,0.04);border:1px solid var(--border-mid);box-shadow:0 4px 24px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.07);}
 .upload-slot.filled:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1);border-color:var(--border-strong);}
+.upload-slot.jump-highlight{animation:jumpPulse 1.6s ease;}
+@keyframes jumpPulse{0%{box-shadow:0 0 0 0 rgba(139,92,246,0);border-color:var(--border-mid);}15%{box-shadow:0 0 0 6px rgba(139,92,246,0.35);border-color:rgba(139,92,246,0.7);}100%{box-shadow:0 0 0 0 rgba(139,92,246,0);border-color:var(--border-mid);}}
 
 /* ── MEDIA AREA ── */
 .slot-media{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#000;flex-shrink:0;}
@@ -246,6 +248,35 @@ footer{padding:44px 0 26px;}
 .floating-cta{position:fixed;right:20px;bottom:20px;z-index:900;opacity:0;transform:translateY(14px) scale(.95);pointer-events:none;transition:opacity .25s ease,transform .25s ease;box-shadow:0 10px 34px rgba(139,92,246,0.45);}
 .floating-cta.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
 
+/* ── PALETTE SWITCHER ── */
+.palette-btn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.07);border:1px solid var(--border-mid);color:var(--text-dim);flex-shrink:0;transition:background .18s,color .18s,border-color .18s,transform .18s;position:relative;}
+.palette-btn:hover{background:rgba(255,255,255,0.14);color:var(--text);transform:translateY(-1px);}
+.palette-btn svg{width:17px;height:17px;}
+.palette-menu{position:absolute;top:calc(100% + 10px);right:0;min-width:190px;padding:8px;border-radius:14px;background:rgba(14,14,22,0.92);backdrop-filter:var(--blur-lg);-webkit-backdrop-filter:var(--blur-lg);border:1px solid var(--border-strong);box-shadow:0 20px 50px rgba(0,0,0,0.55);display:none;flex-direction:column;gap:2px;z-index:1100;}
+.palette-menu.open{display:flex;animation:paletteMenuIn .16s ease;}
+@keyframes paletteMenuIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.palette-option{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;font-size:.82rem;color:var(--text-dim);text-align:left;width:100%;transition:background .15s,color .15s;}
+.palette-option:hover{background:rgba(255,255,255,0.07);color:var(--text);}
+.palette-option.active{background:rgba(255,255,255,0.09);color:var(--text);font-weight:600;}
+.palette-swatch{width:16px;height:16px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,255,255,0.25);}
+.palette-wrap{position:relative;}
+
+/* ── LOADING SCREEN ── */
+#loadingScreen{position:fixed;inset:0;z-index:5000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease;}
+#loadingScreen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-stage{display:flex;flex-direction:column;align-items:center;gap:22px;}
+.loader-ring-wrap{position:relative;width:84px;height:84px;display:flex;align-items:center;justify-content:center;}
+.loader-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,0.08);border-top-color:var(--accent-1);border-right-color:var(--accent-3);animation:loaderSpin 1.1s linear infinite;}
+.loader-icon{width:44px;height:44px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--glass-1);border:1px solid var(--border-mid);animation:loaderPulse 1.6s ease-in-out infinite;}
+.loader-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+.loader-icon-placeholder{width:100%;height:100%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#06060e;}
+.loader-word{font-size:.82rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);}
+.loader-word span{display:inline-block;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+@keyframes loaderSpin{to{transform:rotate(360deg);}}
+@keyframes loaderPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.07);opacity:.85;}}
+body.loading{overflow:hidden;}
+@media(prefers-reduced-motion:reduce){.loader-ring{animation:none;border-top-color:var(--accent-2);}.loader-icon{animation:none;}}
+
 /* ── RESPONSIVE ── */
 @media(max-width:860px){.about-grid{grid-template-columns:1fr;}.about-photo{max-width:240px;}}
 @media(max-width:760px){
@@ -259,12 +290,27 @@ footer{padding:44px 0 26px;}
   .modal-ctrl-btn svg{width:18px;height:18px;}
   .overlay-btn{width:42px;height:42px;}
   .floating-cta{right:14px;bottom:14px;}
+  .palette-menu{right:-8px;}
 }
 @media(max-width:640px){section{padding:70px 0;}.contact-card{padding:50px 22px;}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}.cat-grid.active{animation:none;}.slot-media.loading{animation:none;}}
 </style>
 </head>
-<body>
+<body class="loading">
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="loader-stage">
+    <div class="loader-ring-wrap">
+      <div class="loader-ring"></div>
+      <div class="loader-icon" id="loaderIconWrap">
+        <span class="loader-icon-placeholder">S</span>
+      </div>
+    </div>
+    <span class="loader-word">Suraj<span>.</span></span>
+  </div>
+</div>
+
 <a class="skip-link" href="#work">Skip to content</a>
 <div id="scrollProgress"></div>
 
@@ -284,6 +330,12 @@ footer{padding:44px 0 26px;}
       <a href="#contact" data-target="#contact">Contact</a>
     </div>
     <div class="nav-right">
+      <div class="palette-wrap" id="paletteWrap">
+        <button type="button" class="palette-btn" id="paletteBtn" aria-label="Change color palette" aria-expanded="false" title="Color palette">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a10 10 0 1 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.9 1.9-1.9H17a4 4 0 0 0 4-4c0-5-4.5-9.5-9-9.5z"/><circle cx="7.5" cy="10.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="11.5" cy="7" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="9.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        </button>
+        <div class="palette-menu" id="paletteMenu"></div>
+      </div>
       <a class="btn btn-grad btn-sm" href="mailto:surajbartwal101@gmail.com">Let's talk</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
     </div>
@@ -514,11 +566,31 @@ footer{padding:44px 0 26px;}
 
      FEATURED_PROJECT → picks one entry above to spotlight at the top
        of the Work section. Set to null to hide it entirely.
+
+     PALETTES → the color-theme options offered from the palette
+       button in the nav (paint-bucket icon, top right). Each entry
+       maps to a set of CSS variables. Add / remove / rename entries
+       freely; the button + dropdown menu build themselves from this
+       list automatically. The visitor's last pick is remembered
+       (localStorage) so it persists across visits.
      ============================================================== */
   const SITE_CONFIG = {
     brandIconLink: 'https://drive.google.com/file/d/1RO_rFDUqr5buUsKSwB-cAP2FnbBuw0JN/preview',
     profilePhotoLink: 'https://drive.google.com/file/d/1CbU0bMw47duakkvSp3g1D5c9IiN2xti_/preview',
   };
+
+  const PALETTES = [
+    { key:'aurora',   label:'Aurora (default)', swatch:'#8b5cf6',
+      vars:{ '--bg':'#07070c', '--accent-1':'#8b5cf6', '--accent-2':'#3b82f6', '--accent-3':'#22d3ee', '--text':'#f0f0f5', '--text-dim':'#9898a8', '--text-faint':'#5a5a68' } },
+    { key:'earthy',   label:'Earthy Clay & Sage', swatch:'#c98a5e',
+      vars:{ '--bg':'#0d0b08', '--accent-1':'#c98a5e', '--accent-2':'#8fa383', '--accent-3':'#d8c39a', '--text':'#f2ede4', '--text-dim':'#a89a86', '--text-faint':'#6b5f4f' } },
+    { key:'ocean',    label:'Deep Ocean', swatch:'#2fb8c6', vars:{ '--bg':'#050b12', '--accent-1':'#1e6fa8', '--accent-2':'#2fb8c6', '--accent-3':'#8ee3d8', '--text':'#eaf6f6', '--text-dim':'#8fa9ac', '--text-faint':'#4c6266' } },
+    { key:'sunset',   label:'Sunset Coral', swatch:'#fb7185', vars:{ '--bg':'#0e0709', '--accent-1':'#f97316', '--accent-2':'#fb7185', '--accent-3':'#fbbf24', '--text':'#fbf1ea', '--text-dim':'#b09a90', '--text-faint':'#6b584f' } },
+    { key:'mono',     label:'Monochrome Ink', swatch:'#d4d4d8', vars:{ '--bg':'#08080a', '--accent-1':'#a1a1aa', '--accent-2':'#e4e4e7', '--accent-3':'#71717a', '--text':'#f4f4f5', '--text-dim':'#9c9ca4', '--text-faint':'#5c5c64' } },
+    { key:'forest',   label:'Forest Moss', swatch:'#84a15c', vars:{ '--bg':'#080c08', '--accent-1':'#4d7c3f', '--accent-2':'#84a15c', '--accent-3':'#e9c46a', '--text':'#eef2e6', '--text-dim':'#9bab8c', '--text-faint':'#586750' } },
+    { key:'cyber',    label:'Cyber Neon', swatch:'#e14bf2', vars:{ '--bg':'#08050f', '--accent-1':'#e14bf2', '--accent-2':'#7c3aed', '--accent-3':'#22e0e0', '--text':'#f3edfd', '--text-dim':'#a692c4', '--text-faint':'#5f4f7a' } }
+  ];
+  const PALETTE_STORAGE_KEY = 'suraj-portfolio-palette';
 
   const PROJECT_LINKS = {
     ai: [
@@ -602,12 +674,80 @@ footer{padding:44px 0 26px;}
     });
     const favicon = document.getElementById('site-favicon');
     if(favicon) favicon.href = imgUrl;
+    const loaderIcon = document.getElementById('loaderIconWrap');
+    if(loaderIcon) loaderIcon.innerHTML = `<img src="${imgUrl}" alt="logo" onerror="this.parentElement.innerHTML='<span class=\\'loader-icon-placeholder\\'>S</span>'">`;
   }
   function applyProfilePhoto(url){
     if(!url) return;
     const imgUrl = toDriveImageUrl(url);
     const wrap = document.getElementById('profilePhotoWrap');
     if(wrap) wrap.innerHTML = `<img src="${imgUrl}" alt="Suraj Singh Bartwal" onerror="this.parentElement.innerHTML='<span>Could not load image.<br>Check the link is public.</span>'">`;
+  }
+
+  /* ── PALETTE SWITCHER ── */
+  function applyPalette(key, opts){
+    opts = opts || {};
+    const palette = PALETTES.find(p=>p.key===key) || PALETTES[0];
+    Object.entries(palette.vars).forEach(([prop,val])=>{
+      document.documentElement.style.setProperty(prop, val);
+    });
+    document.documentElement.setAttribute('data-palette', palette.key);
+    document.querySelectorAll('.palette-option').forEach(opt=>{
+      opt.classList.toggle('active', opt.dataset.paletteKey===palette.key);
+    });
+    if(!opts.skipSave){
+      try{ localStorage.setItem(PALETTE_STORAGE_KEY, palette.key); }catch(e){}
+    }
+  }
+  function buildPaletteMenu(){
+    const menu = document.getElementById('paletteMenu');
+    const btn = document.getElementById('paletteBtn');
+    if(!menu || !btn) return;
+    menu.innerHTML = PALETTES.map(p=>`
+      <button type="button" class="palette-option" data-palette-key="${p.key}">
+        <span class="palette-swatch" style="background:${p.swatch}"></span>${p.label}
+      </button>`).join('');
+    menu.querySelectorAll('.palette-option').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        applyPalette(opt.dataset.paletteKey);
+        closePaletteMenu();
+      });
+    });
+    function openPaletteMenu(){ menu.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    function closePaletteMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      menu.classList.contains('open') ? closePaletteMenu() : openPaletteMenu();
+    });
+    document.addEventListener('click', e=>{
+      if(!menu.contains(e.target) && e.target!==btn) closePaletteMenu();
+    });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePaletteMenu(); });
+    let saved = null;
+    try{ saved = localStorage.getItem(PALETTE_STORAGE_KEY); }catch(e){}
+    applyPalette(saved && PALETTES.some(p=>p.key===saved) ? saved : PALETTES[0].key, { skipSave:true });
+  }
+
+  /* ── LOADING SCREEN ── */
+  function hideLoadingScreen(){
+    const el = document.getElementById('loadingScreen');
+    document.body.classList.remove('loading');
+    if(!el) return;
+    el.classList.add('hidden');
+    setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); }, 550);
+  }
+  function initLoadingScreen(){
+    const minShow = reduceMotion ? 200 : 1100;
+    const start = Date.now();
+    function finish(){
+      const elapsed = Date.now() - start;
+      const wait = Math.max(0, minShow - elapsed);
+      setTimeout(hideLoadingScreen, wait);
+    }
+    if(document.readyState === 'complete'){ finish(); }
+    else { window.addEventListener('load', finish); }
+    // Safety net in case 'load' never fires cleanly (slow embeds etc.)
+    setTimeout(hideLoadingScreen, 4000);
   }
 
   /* ── HELPERS ── */
@@ -819,9 +959,27 @@ footer{padding:44px 0 26px;}
           <button type="button" class="btn btn-grad" id="featuredOpenBtn">Watch project</button>
         </div>
       </div>`;
-    const openFeatured = ()=>openModal({ ...entry, kind }, false);
-    document.getElementById('featuredMedia').addEventListener('click', openFeatured);
-    document.getElementById('featuredOpenBtn').addEventListener('click', openFeatured);
+    // Clicking the thumbnail itself still opens the full preview modal.
+    document.getElementById('featuredMedia').addEventListener('click', ()=>openModal({ ...entry, kind }, false));
+    // "Watch project" jumps to the second video in this project's category instead.
+    document.getElementById('featuredOpenBtn').addEventListener('click', ()=>jumpToCategorySlot(FEATURED_PROJECT.category, 1));
+  }
+
+  /* Switches to the given category tab (rendering it if needed), then
+     smooth-scrolls to a specific slot within its grid and gives it a
+     brief highlight pulse so it's obvious where the view landed. */
+  function jumpToCategorySlot(catKey, slotIdx){
+    setActiveTab(catKey);
+    requestAnimationFrame(()=>{
+      setTimeout(()=>{
+        const slot = document.querySelector(`.upload-slot[data-cat="${catKey}"][data-idx="${slotIdx}"]`);
+        if(!slot) return;
+        slot.scrollIntoView({ behavior: reduceMotion?'auto':'smooth', block:'center' });
+        slot.classList.remove('jump-highlight');
+        void slot.offsetWidth;
+        slot.classList.add('jump-highlight');
+      }, 60);
+    });
   }
 
   /* ── SWIPEABLE CATEGORY SWITCHER ── */
@@ -1052,12 +1210,14 @@ footer{padding:44px 0 26px;}
   buildGrids();
   updateCategoryBadges();
   bindFilterPills();
+  buildPaletteMenu();
   renderFeaturedProject();
   setActiveTab('longform', { scroll:false });
   updateScrollProgress();
   updateFloatingCta();
   if(SITE_CONFIG.brandIconLink) applyBrandIcon(SITE_CONFIG.brandIconLink);
   if(SITE_CONFIG.profilePhotoLink) applyProfilePhoto(SITE_CONFIG.profilePhotoLink);
+  initLoadingScreen();
 
 })();
 </script>
