@@ -119,8 +119,6 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .filter-pill{font-size:.78rem;font-weight:600;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid var(--border-mid);color:var(--text-dim);transition:background .18s,border-color .18s,color .18s;}
 .filter-pill:hover{border-color:var(--border-strong);color:var(--text);}
 .filter-pill.active{background:linear-gradient(160deg,rgba(139,92,246,0.22),rgba(34,211,238,0.1));border-color:rgba(139,92,246,0.55);color:var(--text);}
-.tag-badge{position:absolute;top:10px;left:10px;font-size:.62rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);}
-.tag-badge.ai{background:linear-gradient(120deg,rgba(139,92,246,0.75),rgba(34,211,238,0.65));border-color:transparent;color:#06060e;}
 .upload-slot.filtered-out{display:none;}
 .slot-meta{display:block;font-size:.74rem;color:var(--text-faint);margin-top:1px;}
 
@@ -265,11 +263,11 @@ footer{padding:44px 0 26px;}
 #loadingScreen{position:fixed;inset:0;z-index:5000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease;}
 #loadingScreen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 .loader-stage{display:flex;flex-direction:column;align-items:center;gap:22px;}
-.loader-ring-wrap{position:relative;width:84px;height:84px;display:flex;align-items:center;justify-content:center;}
-.loader-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,0.08);border-top-color:var(--accent-1);border-right-color:var(--accent-3);animation:loaderSpin 1.1s linear infinite;}
-.loader-icon{width:44px;height:44px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--glass-1);border:1px solid var(--border-mid);animation:loaderPulse 1.6s ease-in-out infinite;}
+.loader-ring-wrap{position:relative;width:128px;height:128px;display:flex;align-items:center;justify-content:center;}
+.loader-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,0.08);border-top-color:var(--accent-1);border-right-color:var(--accent-3);animation:loaderSpin 1.1s linear infinite;}
+.loader-icon{width:74px;height:74px;border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--glass-1);border:1px solid var(--border-mid);animation:loaderPulse 1.6s ease-in-out infinite;}
 .loader-icon img{width:100%;height:100%;object-fit:cover;display:block;}
-.loader-icon-placeholder{width:100%;height:100%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#06060e;}
+.loader-icon-placeholder{width:100%;height:100%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#06060e;}
 .loader-word{font-size:.82rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);}
 .loader-word span{display:inline-block;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
 @keyframes loaderSpin{to{transform:rotate(360deg);}}
@@ -575,7 +573,7 @@ body.loading{overflow:hidden;}
        (localStorage) so it persists across visits.
      ============================================================== */
   const SITE_CONFIG = {
-    brandIconLink: 'https://drive.google.com/file/d/1TgIbPZkGHdEC8VrTIkYBRc7U3vcJVWEw/preview',
+    brandIconLink: 'https://drive.google.com/file/d/1RO_rFDUqr5buUsKSwB-cAP2FnbBuw0JN/preview',
     profilePhotoLink: 'https://drive.google.com/file/d/1CbU0bMw47duakkvSp3g1D5c9IiN2xti_/preview',
   };
 
@@ -591,6 +589,10 @@ body.loading{overflow:hidden;}
     { key:'cyber',    label:'Cyber Neon', swatch:'#e14bf2', vars:{ '--bg':'#08050f', '--accent-1':'#e14bf2', '--accent-2':'#7c3aed', '--accent-3':'#22e0e0', '--text':'#f3edfd', '--text-dim':'#a692c4', '--text-faint':'#5f4f7a' } }
   ];
   const PALETTE_STORAGE_KEY = 'suraj-portfolio-palette';
+  // Which palette (by "key" above) loads for first-time visitors.
+  // Once someone picks a theme from the nav button, their choice is
+  // remembered and overrides this on their return visits.
+  const DEFAULT_PALETTE = 'aurora';
 
   const PROJECT_LINKS = {
     ai: [
@@ -687,7 +689,7 @@ body.loading{overflow:hidden;}
   /* ── PALETTE SWITCHER ── */
   function applyPalette(key, opts){
     opts = opts || {};
-    const palette = PALETTES.find(p=>p.key===key) || PALETTES[0];
+    const palette = PALETTES.find(p=>p.key===key) || PALETTES.find(p=>p.key===DEFAULT_PALETTE) || PALETTES[0];
     Object.entries(palette.vars).forEach(([prop,val])=>{
       document.documentElement.style.setProperty(prop, val);
     });
@@ -725,7 +727,7 @@ body.loading{overflow:hidden;}
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePaletteMenu(); });
     let saved = null;
     try{ saved = localStorage.getItem(PALETTE_STORAGE_KEY); }catch(e){}
-    applyPalette(saved && PALETTES.some(p=>p.key===saved) ? saved : PALETTES[0].key, { skipSave:true });
+    applyPalette(saved && PALETTES.some(p=>p.key===saved) ? saved : DEFAULT_PALETTE, { skipSave:true });
   }
 
   /* ── LOADING SCREEN ── */
@@ -791,11 +793,9 @@ body.loading{overflow:hidden;}
     } else {
       mediaEl = `<video class="native-video" src="${entry.link}" muted loop playsinline preload="metadata"></video><span class="play-chip">&#9658;</span>`;
     }
-    const tagLabel = entry.tag === 'ai' ? 'AI' : 'Edit';
     const metaLine = entry.meta ? `<span class="slot-meta">${escapeHtml(entry.meta)}</span>` : '';
     return `<div class="slot-media loading">
         ${mediaEl}
-        <span class="tag-badge${entry.tag==='ai'?' ai':''}">${tagLabel}</span>
         <span class="ratio-badge">16:9</span>
         <div class="slot-overlay">
           <button type="button" class="overlay-btn preview-open-btn" title="Preview">
