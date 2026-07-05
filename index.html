@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Suraj Singh Bartwal — Video Editor &amp; Motion Graphics Designer</title>
 <meta name="description" content="Portfolio of Suraj Singh Bartwal — video editor, motion graphics designer based in Delhi, India.">
+<meta property="og:title" content="Suraj Singh Bartwal — Video Editor & Motion Graphics Designer">
+<meta property="og:description" content="Video edits that make people stop scrolling. Delhi-based video editor and motion graphics designer specializing in technical videos, product explainers, and AI-assisted editing.">
+<meta property="og:type" content="website">
 <link id="site-favicon" rel="icon" type="image/png" href="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,6 +56,11 @@ a{color:inherit;text-decoration:none;}
 .gradient-flow{background:var(--gradient);background-size:300% 300%;animation:gradientFlow 7s ease infinite;}
 .glass{background:var(--glass-1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--border-mid);}
 
+/* ── REVEAL ON SCROLL ── */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important;}}
+
 /* ── NAV ── */
 #nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:rgba(7,7,12,0.55);backdrop-filter:var(--blur-lg);-webkit-backdrop-filter:var(--blur-lg);border-bottom:1px solid var(--border-mid);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 4px 32px rgba(0,0,0,0.4);}
 .nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;}
@@ -91,12 +99,21 @@ a{color:inherit;text-decoration:none;}
 @keyframes drift3{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,-30px) scale(1.1);}}
 .hero-inner{position:relative;z-index:1;text-align:center;}
 .pill-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;font-size:.8rem;color:var(--text-dim);margin-bottom:28px;background:rgba(255,255,255,0.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border-strong);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);}
-.pill-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-3);box-shadow:0 0 10px var(--accent-3);}
+.pill-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-3);box-shadow:0 0 10px var(--accent-3);animation:dotPulse 2s ease-in-out infinite;}
+@keyframes dotPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 .hero h1{font-size:clamp(2.4rem,5.4vw,4.2rem);font-weight:800;letter-spacing:-.022em;line-height:1.08;max-width:860px;margin:0 auto 22px;}
 .hero .lede{color:var(--text-dim);font-size:clamp(.98rem,1.3vw,1.12rem);max-width:520px;margin:0 auto 36px;}
 .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;}
-.hero-stats{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;font-size:.83rem;color:var(--text-faint);}
-.hero-stats b{color:var(--text-dim);font-weight:600;}
+
+/* ── HERO STATS ── */
+.hero-stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.stat-card{display:flex;align-items:center;gap:11px;padding:11px 20px;border-radius:16px;background:rgba(255,255,255,0.045);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border-mid);transition:border-color .2s,transform .2s;}
+.stat-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.stat-icon{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(139,92,246,0.22),rgba(34,211,238,0.12));color:var(--accent-3);}
+.stat-icon svg{width:16px;height:16px;}
+.stat-text{text-align:left;}
+.stat-text b{display:block;font-size:.9rem;color:var(--text);font-weight:700;line-height:1.25;}
+.stat-text .stat-label{display:block;font-size:.68rem;color:var(--text-faint);letter-spacing:.02em;}
 
 /* ── SECTIONS ── */
 section{padding:100px 0;position:relative;}
@@ -108,7 +125,7 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 /* ── FEATURED PROJECT ── */
 .featured-project{display:grid;grid-template-columns:1.1fr 1fr;gap:0;border-radius:var(--radius-xl);overflow:hidden;background:rgba(255,255,255,0.04);border:1px solid var(--border-mid);margin-bottom:36px;box-shadow:0 12px 44px rgba(0,0,0,0.4);}
 .featured-media{position:relative;aspect-ratio:16/9;background:#000;cursor:pointer;overflow:hidden;}
-.featured-media iframe,.featured-media video{width:100%;height:100%;border:none;object-fit:cover;}
+.featured-media iframe,.featured-media video,.featured-media img{width:100%;height:100%;border:none;object-fit:cover;position:absolute;inset:0;}
 .featured-badge{position:absolute;top:12px;left:12px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--gradient);background-size:300% 300%;animation:gradientFlow 7s ease infinite;color:#06060e;z-index:2;}
 .featured-copy{padding:30px 32px;display:flex;flex-direction:column;justify-content:center;gap:12px;}
 .featured-copy h3{font-size:1.3rem;font-weight:700;letter-spacing:-.01em;}
@@ -149,16 +166,7 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 
 /* ── PROJECT GRID ── */
 .cat-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;}
-.cat-grid.active{display:grid;animation:gridFadeIn .35s ease;}
-@keyframes gridFadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-
-/* ── SHIMMER / FALLBACK ── */
-.slot-media.loading{background:linear-gradient(100deg,rgba(255,255,255,0.03) 30%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.03) 70%);background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite;}
-@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.media-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:rgba(255,255,255,0.03);color:var(--text-faint);}
-.media-fallback svg{width:20px;height:20px;}
-.media-fallback span{font-size:.8rem;}
-.media-fallback a{font-size:.78rem;font-weight:600;color:var(--accent-3);text-decoration:underline;}
+.cat-grid.active{display:grid;}
 
 /* ── CARD SHELL ── */
 .upload-slot{border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;min-height:240px;position:relative;transition:border-color .25s,transform .25s,box-shadow .25s;}
@@ -172,19 +180,30 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 @keyframes jumpPulse{0%{box-shadow:0 0 0 0 rgba(139,92,246,0);border-color:var(--border-mid);}15%{box-shadow:0 0 0 6px rgba(139,92,246,0.35);border-color:rgba(139,92,246,0.7);}100%{box-shadow:0 0 0 0 rgba(139,92,246,0);border-color:var(--border-mid);}}
 
 /* ── MEDIA AREA ── */
-.slot-media{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#000;flex-shrink:0;}
-.slot-media img,.slot-media video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
-.slot-media:hover img,.slot-media:hover video{transform:scale(1.03);}
-.slot-media iframe{width:100%;height:100%;border:none;position:absolute;top:0;left:0;}
-.ratio-badge{position:absolute;top:10px;right:10px;font-size:.65rem;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,0.9);background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);padding:3px 8px;border-radius:6px;}
-.play-chip{position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;transition:transform .2s,background .2s;pointer-events:none;}
+.slot-media{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#0b0b12;flex-shrink:0;}
+.slot-media .thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s ease,transform .3s ease;background:linear-gradient(100deg,rgba(255,255,255,0.03) 30%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 70%);background-size:200% 100%;}
+.slot-media .thumb-img.loading-bg{animation:shimmer 1.6s ease-in-out infinite;}
+.slot-media .thumb-img.loaded{opacity:1;}
+.slot-media:hover .thumb-img{transform:scale(1.035);}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.slot-media .drive-frame,.slot-media .hover-video{position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:1;}
+.slot-media .drive-frame.active,.slot-media .hover-video.active{opacity:1;}
+.ratio-badge{position:absolute;top:10px;right:10px;font-size:.65rem;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,0.9);background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);padding:3px 8px;border-radius:6px;z-index:2;}
+.chip-tag{position:absolute;top:10px;left:10px;font-size:.65rem;font-weight:700;letter-spacing:.03em;color:#fff;background:rgba(139,92,246,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);padding:4px 10px;border-radius:999px;z-index:2;}
+.play-chip{position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;transition:transform .2s,background .2s;pointer-events:none;z-index:2;}
 .slot-media:hover .play-chip{transform:scale(1.15);background:rgba(139,92,246,0.7);}
-.duration-badge{position:absolute;bottom:10px;left:50px;font-size:.65rem;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:5px;}
-.slot-overlay{position:absolute;right:10px;bottom:10px;display:flex;gap:8px;z-index:2;}
+.duration-badge{position:absolute;bottom:10px;left:50px;font-size:.65rem;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:5px;z-index:2;}
+.slot-overlay{position:absolute;right:10px;bottom:10px;display:flex;gap:8px;z-index:3;}
 .overlay-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.28);color:#fff;transform:scale(.7);opacity:0;transition:transform .22s,opacity .22s,background .18s;pointer-events:all;cursor:pointer;}
 .slot-media:hover .overlay-btn{transform:scale(1);opacity:1;}
 .overlay-btn:hover{background:rgba(139,92,246,0.75);}
 .overlay-btn svg{width:15px;height:15px;}
+
+/* ── FALLBACK (thumbnail failed) ── */
+.media-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;background:rgba(255,255,255,0.03);color:var(--text-faint);z-index:2;}
+.media-fallback svg{width:20px;height:20px;}
+.media-fallback span{font-size:.8rem;}
+.media-fallback a{font-size:.78rem;font-weight:600;color:var(--accent-3);text-decoration:underline;}
 
 /* ── SLOT FOOTER ── */
 .slot-foot{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
@@ -232,6 +251,13 @@ footer{padding:44px 0 26px;}
 .modal-body img{width:100%;max-height:74vh;object-fit:contain;display:block;}
 .modal-body iframe{width:100%;height:72vh;border:none;display:block;}
 .modal-body video{width:100%;max-height:74vh;object-fit:contain;display:block;background:#000;}
+.modal-nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;color:#fff;z-index:10;transition:background .18s,transform .18s;}
+.modal-nav-btn:hover{background:rgba(139,92,246,0.7);transform:translateY(-50%) scale(1.06);}
+.modal-nav-btn svg{width:18px;height:18px;}
+.modal-nav-btn.prev{left:-58px;}
+.modal-nav-btn.next{right:-58px;}
+.modal-nav-btn.hidden{display:none;}
+@media(max-width:960px){.modal-nav-btn.prev{left:8px;}.modal-nav-btn.next{right:8px;}.modal-nav-btn{background:rgba(0,0,0,0.5);}}
 
 /* ── CUSTOM PLAYER (self-hosted video only) ── */
 .player-wrap{position:relative;}
@@ -293,7 +319,7 @@ body.loading{overflow:hidden;}
   .palette-menu{right:-8px;}
 }
 @media(max-width:640px){section{padding:70px 0;}.contact-card{padding:50px 22px;}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}.cat-grid.active{animation:none;}.slot-media.loading{animation:none;}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}.slot-media .thumb-img.loading-bg{animation:none;}}
 </style>
 </head>
 <body class="loading">
@@ -355,7 +381,18 @@ body.loading{overflow:hidden;}
     </div>
     <div class="hero-stats">
       <!-- Edit these three to real numbers/claims whenever you have them -->
-      <span><b>3+ yrs</b> experience</span><span><b>AI-assisted</b> workflow</span><span>Based in <b>Delhi, India</b></span>
+      <div class="stat-card">
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        <span class="stat-text"><b>3+ yrs</b><span class="stat-label">Experience</span></span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></span>
+        <span class="stat-text"><b>AI-assisted</b><span class="stat-label">Workflow</span></span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.2"/></svg></span>
+        <span class="stat-text"><b>Delhi, India</b><span class="stat-label">Based in</span></span>
+      </div>
     </div>
   </div>
 </header>
@@ -519,6 +556,12 @@ body.loading{overflow:hidden;}
 <!-- FULLSCREEN MODAL -->
 <div class="modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-content">
+    <button class="modal-nav-btn prev hidden" id="modalPrevBtn" aria-label="Previous project">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="modal-nav-btn next hidden" id="modalNextBtn" aria-label="Next project">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
     <div class="modal-header">
       <h3 id="modalTitle">Project</h3>
       <div class="modal-controls">
@@ -542,6 +585,7 @@ body.loading{overflow:hidden;}
 (function(){
   'use strict';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = window.matchMedia('(hover: none)').matches;
 
   /* ==============================================================
      ★ EDIT YOUR PORTFOLIO HERE — this is the ONLY place you need
@@ -551,19 +595,21 @@ body.loading{overflow:hidden;}
      SITE_CONFIG.brandIconLink   → nav logo + browser tab favicon
      SITE_CONFIG.profilePhotoLink → About section headshot
 
-     PROJECT_LINKS.<category>[slot] → { title, link, tag, meta }
-       - Google Drive share link  → embed, autoplay-on-hover/click,
-         opens Google's own player in the modal.
-       - Direct video file URL (.mp4/.webm/.mov) → switches to the
-         built-in custom player: hover/click autoplay + a minimal
+     PROJECT_LINKS.<category>[slot] → { title, link, tag, meta, chip }
+       - Google Drive share link  → shows a fast-loading thumbnail
+         first; hovering (desktop) swaps in a live autoplay preview,
+         clicking always opens the full modal player.
+       - Direct video file URL (.mp4/.webm/.mov) → uses the built-in
+         custom player: the video file itself is the thumbnail
+         (paused on first frame), hover/click autoplay + a minimal
          control bar (play/pause, seek, mute) that auto-hides while
-         playing and reappears on tap/mousemove. Useful if you want
-         to self-host a couple of flagship reels on a CDN instead of
-         Google Drive for faster, more reliable playback.
+         playing and reappears on tap/mousemove.
        - Leave "link" empty ('') to show a "Coming soon" slot.
        - tag: 'ai' or 'traditional' — powers the filter pills above the grid.
        - meta: short one-line caption shown under the title (tools used,
          result, etc). Leave '' to hide it.
+       - chip: short 1-3 word label badge shown on the thumbnail itself
+         (e.g. "Case Study", "Ad", "Reel"). Leave '' to hide it.
 
      FEATURED_PROJECT → picks one entry above to spotlight at the top
        of the Work section. Set to null to hide it entirely.
@@ -599,36 +645,36 @@ body.loading{overflow:hidden;}
 
   const PROJECT_LINKS = {
     ai: [
-      { title: 'Job Search Ad', link: 'https://drive.google.com/file/d/1SuVqf7DJz9ivEwWyoSIhSACkUiVwt8Wn/preview', tag:'ai', meta:'AI-generated · composited in After Effects' },
-      { title: 'AI Candy Ad', link: 'https://drive.google.com/file/d/1-3RqVKswi-BlZ0XMivLqal-Q5MKHvk9v/preview', tag:'ai', meta:'Kling AI · Nano Banana' },
-      { title: 'Gym Ad', link: 'https://drive.google.com/file/d/1aOO0ybqhwjjlMVpcCD-oCdgwa1JM4a3v/preview', tag:'ai', meta:'Veo 3 · Premiere Pro finish' },
-      { title: 'UGC AI Ad', link: 'https://drive.google.com/file/d/1oQ1kqWHNW0tfJtA3-FXQWnoAfKjEKOUm/preview', tag:'ai', meta:'AI-generated UGC style' },
-      { title: 'AI Family', link: 'https://drive.google.com/file/d/1BrcIOptQAF--8ibfpIBUCg9yGdWvSZGz/preview', tag:'ai', meta:'Seedream · Nano Banana' },
-      { title: 'HDFC Ad Trial', link: 'https://drive.google.com/file/d/1RgdtvqUAmUVTEjqXagVmLfGc-XqMYMbj/preview', tag:'ai', meta:'AI concept ad trial' },
+      { title: 'Job Search Ad', link: 'https://drive.google.com/file/d/1SuVqf7DJz9ivEwWyoSIhSACkUiVwt8Wn/preview', tag:'ai', meta:'AI-generated · composited in After Effects', chip:'Ad' },
+      { title: 'AI Candy Ad', link: 'https://drive.google.com/file/d/1-3RqVKswi-BlZ0XMivLqal-Q5MKHvk9v/preview', tag:'ai', meta:'Kling AI · Nano Banana', chip:'Ad' },
+      { title: 'Gym Ad', link: 'https://drive.google.com/file/d/1aOO0ybqhwjjlMVpcCD-oCdgwa1JM4a3v/preview', tag:'ai', meta:'Veo 3 · Premiere Pro finish', chip:'Ad' },
+      { title: 'UGC AI Ad', link: 'https://drive.google.com/file/d/1oQ1kqWHNW0tfJtA3-FXQWnoAfKjEKOUm/preview', tag:'ai', meta:'AI-generated UGC style', chip:'UGC' },
+      { title: 'AI Family', link: 'https://drive.google.com/file/d/1BrcIOptQAF--8ibfpIBUCg9yGdWvSZGz/preview', tag:'ai', meta:'Seedream · Nano Banana', chip:'Concept' },
+      { title: 'HDFC Ad Trial', link: 'https://drive.google.com/file/d/1RgdtvqUAmUVTEjqXagVmLfGc-XqMYMbj/preview', tag:'ai', meta:'AI concept ad trial', chip:'Concept' },
     ],
     saas: [
-      { title: 'AY Connect', link: 'https://drive.google.com/file/d/1FTOhlh3xEteJB1y3y9NL1-lTGMD8Ew2t/preview', tag:'traditional', meta:'Product walkthrough · Premiere Pro' },
-      { title: 'Allergy App', link: 'https://drive.google.com/file/d/1KNGoBnOHBdnshmEbo8siXRsQP0mUm6CC/preview', tag:'traditional', meta:'Feature explainer · After Effects' },
-      { title: 'Project 3', link: '', tag:'traditional', meta:'' },
-      { title: 'Project 4', link: '', tag:'traditional', meta:'' },
-      { title: 'Project 5', link: '', tag:'traditional', meta:'' },
-      { title: 'Project 6', link: '', tag:'traditional', meta:'' },
+      { title: 'AY Connect', link: 'https://drive.google.com/file/d/1FTOhlh3xEteJB1y3y9NL1-lTGMD8Ew2t/preview', tag:'traditional', meta:'Product walkthrough · Premiere Pro', chip:'Walkthrough' },
+      { title: 'Allergy App', link: 'https://drive.google.com/file/d/1KNGoBnOHBdnshmEbo8siXRsQP0mUm6CC/preview', tag:'traditional', meta:'Feature explainer · After Effects', chip:'Explainer' },
+      { title: 'Project 3', link: '', tag:'traditional', meta:'', chip:'' },
+      { title: 'Project 4', link: '', tag:'traditional', meta:'', chip:'' },
+      { title: 'Project 5', link: '', tag:'traditional', meta:'', chip:'' },
+      { title: 'Project 6', link: '', tag:'traditional', meta:'', chip:'' },
     ],
     longform: [
-      { title: 'Case Study 1', link: 'https://drive.google.com/file/d/1L1krnL6UqOVFAzUQpcrXyJrL1TE-Uc34/preview', tag:'traditional', meta:'Full case-study walkthrough' },
-      { title: 'App Case Study', link: 'https://drive.google.com/file/d/1R_rJ5mdcV2d6QxCzA-OmVSPeH9eWgJyH/preview', tag:'traditional', meta:'App onboarding, before → after' },
-      { title: 'Live SME Explainer', link: 'https://drive.google.com/file/d/1WZnjTzwDXDcnvXcGB_YyTcy7F6_LUUKd/preview', tag:'traditional', meta:'Live-shot SME explainer' },
-      { title: 'Messy AI', link: 'https://drive.google.com/file/d/1apDTMzvYPeioMhXCXV-DheifiM3SK4dC/preview', tag:'ai', meta:'AI b-roll, cleaned up in edit' },
-      { title: 'Case Study 2', link: 'https://drive.google.com/file/d/1Qz3P8SdZCIwoeo0l4-6OMlJW2kvfmVcx/preview', tag:'traditional', meta:'Client case study' },
-      { title: 'Case Study 3', link: 'https://drive.google.com/file/d/1spAwgo5gN_YA2tH3xxILlv20ysXoG4_g/preview', tag:'traditional', meta:'Client case study' },
+      { title: 'Case Study 1', link: 'https://drive.google.com/file/d/1L1krnL6UqOVFAzUQpcrXyJrL1TE-Uc34/preview', tag:'traditional', meta:'Full case-study walkthrough', chip:'Case Study' },
+      { title: 'App Case Study', link: 'https://drive.google.com/file/d/1R_rJ5mdcV2d6QxCzA-OmVSPeH9eWgJyH/preview', tag:'traditional', meta:'App onboarding, before → after', chip:'Case Study' },
+      { title: 'Live SME Explainer', link: 'https://drive.google.com/file/d/1WZnjTzwDXDcnvXcGB_YyTcy7F6_LUUKd/preview', tag:'traditional', meta:'Live-shot SME explainer', chip:'Explainer' },
+      { title: 'Messy AI', link: 'https://drive.google.com/file/d/1apDTMzvYPeioMhXCXV-DheifiM3SK4dC/preview', tag:'ai', meta:'AI b-roll, cleaned up in edit', chip:'AI B-roll' },
+      { title: 'Case Study 2', link: 'https://drive.google.com/file/d/1Qz3P8SdZCIwoeo0l4-6OMlJW2kvfmVcx/preview', tag:'traditional', meta:'Client case study', chip:'Case Study' },
+      { title: 'Case Study 3', link: 'https://drive.google.com/file/d/1spAwgo5gN_YA2tH3xxILlv20ysXoG4_g/preview', tag:'traditional', meta:'Client case study', chip:'Case Study' },
     ],
     shortform: [
-      { title: 'Game Devlopment', link: 'https://drive.google.com/file/d/1OgChI2tEyBPHTgfCOijv4c7WUV4o6QUP/preview', tag:'traditional', meta:'Caption-led short cut' },
-      { title: 'odoo shorts', link: 'https://drive.google.com/file/d/1T2lA3w0x06FK9IPRKphjPZDee_b49yv5/preview', tag:'traditional', meta:'Feature-focused short' },
-      { title: 'Soap Ad', link: 'https://drive.google.com/file/d/1aI_7zrXjFkRFh0YDnK93Cp6WhyCKbLY0/preview', tag:'traditional', meta:'Product short ad' },
-      { title: 'reel', link: 'https://drive.google.com/file/d/1e04BblffICXdlPSPDX3Z6BxVIqfOD-oX/preview', tag:'traditional', meta:'Social reel cut' },
-      { title: '3D Modeling', link: 'https://drive.google.com/file/d/1Lbjr0UYAwW23Lw9JYtUcW4cNiYclZalK/preview', tag:'ai', meta:'3D render showcase' },
-      { title: 'ERP Shorts', link: 'https://drive.google.com/file/d/1nFr3q9sr3rNhV_F3rTOXN0Sb0a_htUp3/preview', tag:'traditional', meta:'ERP feature short' },
+      { title: 'Game Devlopment', link: 'https://drive.google.com/file/d/1OgChI2tEyBPHTgfCOijv4c7WUV4o6QUP/preview', tag:'traditional', meta:'Caption-led short cut', chip:'Short' },
+      { title: 'odoo shorts', link: 'https://drive.google.com/file/d/1T2lA3w0x06FK9IPRKphjPZDee_b49yv5/preview', tag:'traditional', meta:'Feature-focused short', chip:'Short' },
+      { title: 'Soap Ad', link: 'https://drive.google.com/file/d/1aI_7zrXjFkRFh0YDnK93Cp6WhyCKbLY0/preview', tag:'traditional', meta:'Product short ad', chip:'Ad' },
+      { title: 'reel', link: 'https://drive.google.com/file/d/1e04BblffICXdlPSPDX3Z6BxVIqfOD-oX/preview', tag:'traditional', meta:'Social reel cut', chip:'Reel' },
+      { title: '3D Modeling', link: 'https://drive.google.com/file/d/1Lbjr0UYAwW23Lw9JYtUcW4cNiYclZalK/preview', tag:'ai', meta:'3D render showcase', chip:'3D' },
+      { title: 'ERP Shorts', link: 'https://drive.google.com/file/d/1nFr3q9sr3rNhV_F3rTOXN0Sb0a_htUp3/preview', tag:'traditional', meta:'ERP feature short', chip:'Short' },
     ]
   };
 
@@ -657,11 +703,12 @@ body.loading{overflow:hidden;}
     if(m) return 'https://drive.google.com/file/d/'+m[1]+'/preview';
     return url;
   }
-  function toDriveImageUrl(url){
+  function toDriveImageUrl(url, size){
+    size = size || 400;
     if(!url) return '';
     if(url.includes('drive.google.com/thumbnail') || url.includes('lh3.googleusercontent.com')) return url;
     const m = url.match(/\/file\/d\/([^/?]+)/) || url.match(/id=([^&]+)/);
-    if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w400';
+    if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w'+size;
     return url;
   }
   function withAutoplay(embedUrl){
@@ -672,7 +719,7 @@ body.loading{overflow:hidden;}
   /* ── BRANDING ── */
   function applyBrandIcon(url){
     if(!url) return;
-    const imgUrl = toDriveImageUrl(url);
+    const imgUrl = toDriveImageUrl(url, 200);
     ['brandIconWrap','footerBrandIconWrap'].forEach(id=>{
       const wrap = document.getElementById(id);
       if(wrap) wrap.innerHTML = `<img src="${imgUrl}" alt="logo" onerror="this.parentElement.innerHTML='<span class=\\'brand-icon-placeholder\\'>S</span>'">`;
@@ -684,7 +731,7 @@ body.loading{overflow:hidden;}
   }
   function applyProfilePhoto(url){
     if(!url) return;
-    const imgUrl = toDriveImageUrl(url);
+    const imgUrl = toDriveImageUrl(url, 500);
     const wrap = document.getElementById('profilePhotoWrap');
     if(wrap) wrap.innerHTML = `<img src="${imgUrl}" alt="Suraj Singh Bartwal" onerror="this.parentElement.innerHTML='<span>Could not load image.<br>Check the link is public.</span>'">`;
   }
@@ -742,7 +789,10 @@ body.loading{overflow:hidden;}
     setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); }, 550);
   }
   function initLoadingScreen(){
-    const minShow = reduceMotion ? 200 : 1100;
+    // Loading screen now only waits on the page shell (HTML/CSS/JS),
+    // never on video embeds — those load lazily as thumbnails, so
+    // this resolves almost immediately instead of waiting on Drive.
+    const minShow = reduceMotion ? 150 : 500;
     const start = Date.now();
     function finish(){
       const elapsed = Date.now() - start;
@@ -751,8 +801,7 @@ body.loading{overflow:hidden;}
     }
     if(document.readyState === 'complete'){ finish(); }
     else { window.addEventListener('load', finish); }
-    // Safety net in case 'load' never fires cleanly (slow embeds etc.)
-    setTimeout(hideLoadingScreen, 4000);
+    setTimeout(hideLoadingScreen, 2200);
   }
 
   /* ── HELPERS ── */
@@ -763,6 +812,22 @@ body.loading{overflow:hidden;}
     return m+':'+(sec<10?'0':'')+sec;
   }
 
+  /* ── REVEAL ON SCROLL ── */
+  const revealObserver = ('IntersectionObserver' in window) ? new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        en.target.classList.add('in');
+        revealObserver.unobserve(en.target);
+      }
+    });
+  }, { threshold:0.08, rootMargin:'0px 0px -30px 0px' }) : null;
+  function observeReveal(el){
+    if(!el) return;
+    el.classList.add('reveal');
+    if(revealObserver && !reduceMotion) revealObserver.observe(el);
+    else el.classList.add('in');
+  }
+
   /* ── EMPTY SLOT ── */
   function emptySlotHTML(){
     return `<div class="slot-placeholder">
@@ -771,35 +836,29 @@ body.loading{overflow:hidden;}
     </div>`;
   }
 
-  /* ── LOADING SKELETON (shown briefly for lazy categories) ── */
-  function loadingSlotHTML(){
-    return `<div class="slot-media loading"></div>
-      <div class="slot-foot"><span class="slot-title">Loading…</span></div>`;
-  }
-
-  /* ── FALLBACK (embed failed to load in time) ── */
+  /* ── FALLBACK (thumbnail failed to load — instant, no long timers) ── */
   function fallbackHTML(entry){
     const viewUrl = (entry.link||'').replace('/preview','/view');
     return `<div class="media-fallback">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.86a2 2 0 0 0-3.4 0z"/></svg>
-      <span>Preview is slow to load right now.</span>
+      <span>Couldn't load this preview.</span>
       <a href="${viewUrl}" target="_blank" rel="noopener">Open in Google Drive ↗</a>
     </div>`;
   }
 
-  /* ── FILLED SLOT ── */
+  /* ── FILLED SLOT (thumbnail-first: fast by default, video loads only on demand) ── */
   function filledSlotHTML(entry){
     const kind = entry.kind;
-    let mediaEl;
-    if(kind === 'embed'){
-      mediaEl = `<iframe class="drive-frame" data-base-src="${toVideoEmbed(entry.link)}" src="${toVideoEmbed(entry.link)}" frameborder="0" allow="autoplay" allowfullscreen loading="lazy"></iframe><span class="play-chip">&#9658;</span>`;
-    } else {
-      mediaEl = `<video class="native-video" src="${entry.link}" muted loop playsinline preload="metadata"></video><span class="play-chip">&#9658;</span>`;
-    }
+    const chipTag = entry.chip ? `<span class="chip-tag">${escapeHtml(entry.chip)}</span>` : '';
     const metaLine = entry.meta ? `<span class="slot-meta">${escapeHtml(entry.meta)}</span>` : '';
-    return `<div class="slot-media loading">
-        ${mediaEl}
+    const thumbEl = kind === 'embed'
+      ? `<img class="thumb-img loading-bg" alt="" loading="lazy" data-thumb-src="${toDriveImageUrl(entry.link,800)}">`
+      : `<video class="thumb-img loading-bg native-poster" src="${entry.link}" muted playsinline preload="metadata"></video>`;
+    return `<div class="slot-media" data-kind="${kind}" data-embed-src="${kind==='embed'?toVideoEmbed(entry.link):''}">
+        ${thumbEl}
+        ${chipTag}
         <span class="ratio-badge">16:9</span>
+        <span class="play-chip">&#9658;</span>
         <div class="slot-overlay">
           <button type="button" class="overlay-btn preview-open-btn" title="Preview">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -814,47 +873,71 @@ body.loading{overflow:hidden;}
       </div>`;
   }
 
-  function bindEmbedHover(wrap){
+  /* Loads the thumbnail image lazily (only once it's near the viewport)
+     and reports success/failure immediately — no 9-second guessing. */
+  function bindThumbLoad(wrap, entry, kind){
     const media = wrap.querySelector('.slot-media');
-    const frame = wrap.querySelector('.drive-frame');
-    if(!media || !frame || reduceMotion) return;
-    media.addEventListener('mouseenter', ()=>{ frame.src = withAutoplay(frame.dataset.baseSrc); });
-    media.addEventListener('mouseleave', ()=>{ frame.src = frame.dataset.baseSrc; });
-  }
-  function bindNativeHover(wrap){
-    const media = wrap.querySelector('.slot-media');
-    const video = wrap.querySelector('.native-video');
-    if(!media || !video) return;
-    video.onloadedmetadata = ()=>{
-      const dur = document.createElement('span');
-      dur.className='duration-badge'; dur.textContent = fmtDuration(video.duration);
-      media.appendChild(dur);
-    };
-    if(!reduceMotion){
-      media.addEventListener('mouseenter', ()=>video.play().catch(()=>{}));
-      media.addEventListener('mouseleave', ()=>{ video.pause(); video.currentTime = 0; });
+    if(!media) return;
+    if(kind === 'embed'){
+      const img = media.querySelector('.thumb-img');
+      if(!img) return;
+      const setSrc = ()=>{ img.src = img.dataset.thumbSrc; };
+      img.addEventListener('load', ()=>{ img.classList.remove('loading-bg'); img.classList.add('loaded'); });
+      img.addEventListener('error', ()=>{ media.innerHTML = fallbackHTML(entry); });
+      if('IntersectionObserver' in window){
+        const io = new IntersectionObserver((es)=>{
+          es.forEach(en=>{ if(en.isIntersecting){ setSrc(); io.disconnect(); } });
+        }, { rootMargin:'250px' });
+        io.observe(media);
+      } else { setSrc(); }
+    } else {
+      const video = media.querySelector('.native-poster');
+      if(!video) return;
+      video.addEventListener('loadeddata', ()=>{
+        video.classList.remove('loading-bg'); video.classList.add('loaded');
+        if(video.duration){
+          const dur = document.createElement('span');
+          dur.className='duration-badge'; dur.textContent = fmtDuration(video.duration);
+          media.appendChild(dur);
+        }
+      });
+      video.addEventListener('error', ()=>{ media.innerHTML = fallbackHTML(entry); });
     }
   }
 
-  /* Removes the shimmer once media is ready; shows a fallback if it never loads. */
-  function watchMediaLoad(wrap, entry, kind){
+  /* Desktop-only hover preview: after a short dwell, swap in a live
+     autoplay layer over the thumbnail. Never runs on touch devices or
+     with reduced motion, and the layer is destroyed on mouse-leave so
+     nothing keeps streaming in the background. */
+  function bindHoverPreview(wrap, entry, kind){
+    if(reduceMotion || isTouch) return;
     const media = wrap.querySelector('.slot-media');
     if(!media) return;
-    let loaded = false;
-    function markLoaded(){ loaded = true; media.classList.remove('loading'); }
+    let hoverTimer = null, frame = null;
     if(kind === 'embed'){
-      const frame = media.querySelector('.drive-frame');
-      if(frame) frame.addEventListener('load', markLoaded, { once:true });
+      const embedSrc = media.dataset.embedSrc;
+      media.addEventListener('mouseenter', ()=>{
+        hoverTimer = setTimeout(()=>{
+          frame = document.createElement('iframe');
+          frame.className = 'drive-frame';
+          frame.setAttribute('allow','autoplay');
+          frame.setAttribute('frameborder','0');
+          frame.loading = 'lazy';
+          frame.src = withAutoplay(embedSrc);
+          media.appendChild(frame);
+          requestAnimationFrame(()=>frame && frame.classList.add('active'));
+        }, 380);
+      });
+      media.addEventListener('mouseleave', ()=>{
+        clearTimeout(hoverTimer);
+        if(frame){ frame.remove(); frame = null; }
+      });
     } else {
-      const video = media.querySelector('.native-video');
-      if(video) video.addEventListener('loadeddata', markLoaded, { once:true });
+      const video = media.querySelector('.native-poster');
+      if(!video) return;
+      media.addEventListener('mouseenter', ()=>{ video.loop = true; video.play().catch(()=>{}); });
+      media.addEventListener('mouseleave', ()=>{ video.pause(); video.currentTime = 0; });
     }
-    setTimeout(()=>{
-      if(!loaded){
-        media.classList.remove('loading');
-        media.innerHTML = fallbackHTML(entry);
-      }
-    }, 9000);
   }
 
   function renderSlot(catKey, idx, entry){
@@ -870,29 +953,28 @@ body.loading{overflow:hidden;}
     const fullEntry = { ...entry, kind };
     wrap.className = 'upload-slot filled';
     wrap.innerHTML = filledSlotHTML(fullEntry);
-    if(kind === 'embed') bindEmbedHover(wrap); else bindNativeHover(wrap);
-    watchMediaLoad(wrap, fullEntry, kind);
+    observeReveal(wrap);
+    bindThumbLoad(wrap, fullEntry, kind);
+    bindHoverPreview(wrap, fullEntry, kind);
 
     const previewBtn = wrap.querySelector('.preview-open-btn');
     const fsBtn = wrap.querySelector('.fullscreen-open-btn');
     const media = wrap.querySelector('.slot-media');
-    if(previewBtn) previewBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, false); });
-    if(fsBtn) fsBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, true); });
-    if(media) media.addEventListener('click', ()=>openModal(fullEntry, false));
+    if(previewBtn) previewBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, false, catKey, idx); });
+    if(fsBtn) fsBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, true, catKey, idx); });
+    if(media) media.addEventListener('click', ()=>openModal(fullEntry, false, catKey, idx));
   }
 
   /* Builds empty skeleton shells for every category up front, but only
-     renders real embeds/video for the active category. Other categories
-     render lazily the first time their tab is opened — keeps initial
-     iframe count (and load) low. */
+     renders real thumbnails for the active category. Other categories
+     render lazily the first time their tab is opened. */
   function buildGrids(){
     categories.forEach(cat=>{
       const grid = document.getElementById('grid-'+cat.key);
       for(let i=0;i<MAX_SLOTS;i++){
         const wrap = document.createElement('div');
         wrap.className='upload-slot empty'; wrap.dataset.cat=cat.key; wrap.dataset.idx=i;
-        const entry = PROJECT_LINKS[cat.key][i];
-        wrap.innerHTML = (entry && entry.link) ? loadingSlotHTML() : emptySlotHTML();
+        wrap.innerHTML = emptySlotHTML();
         grid.appendChild(wrap);
       }
     });
@@ -940,20 +1022,21 @@ body.loading{overflow:hidden;}
     });
   }
 
-  /* ── FEATURED PROJECT ── */
+  /* ── FEATURED PROJECT (also thumbnail-first) ── */
   function renderFeaturedProject(){
     if(!FEATURED_PROJECT) return;
     const entry = (PROJECT_LINKS[FEATURED_PROJECT.category]||[])[FEATURED_PROJECT.index];
     const wrap = document.getElementById('featuredProjectWrap');
     if(!entry || !entry.link || !wrap) return;
     const kind = isDirectVideo(entry.link) ? 'video' : 'embed';
-    const mediaEl = kind === 'embed'
-      ? `<iframe data-base-src="${toVideoEmbed(entry.link)}" src="${toVideoEmbed(entry.link)}" frameborder="0" allow="autoplay" allowfullscreen loading="lazy"></iframe>`
-      : `<video src="${entry.link}" muted loop playsinline preload="metadata"></video>`;
+    const fullEntry = { ...entry, kind };
+    const thumbEl = kind === 'embed'
+      ? `<img alt="" loading="lazy" data-thumb-src="${toDriveImageUrl(entry.link,900)}">`
+      : `<video src="${entry.link}" muted playsinline preload="metadata"></video>`;
     wrap.innerHTML = `<div class="featured-project">
-        <div class="featured-media" id="featuredMedia">
+        <div class="featured-media" id="featuredMedia" data-embed-src="${kind==='embed'?toVideoEmbed(entry.link):''}">
           <span class="featured-badge">Featured</span>
-          ${mediaEl}
+          ${thumbEl}
         </div>
         <div class="featured-copy">
           <span class="eyebrow grad-text" style="font-size:.7rem;">${categories.find(c=>c.key===FEATURED_PROJECT.category)?.label || ''}</span>
@@ -962,9 +1045,34 @@ body.loading{overflow:hidden;}
           <button type="button" class="btn btn-grad" id="featuredOpenBtn">Watch More</button>
         </div>
       </div>`;
-    // Clicking the thumbnail itself still opens the full preview modal.
-    document.getElementById('featuredMedia').addEventListener('click', ()=>openModal({ ...entry, kind }, false));
-    // "Watch project" jumps to the second video in this project's category instead.
+    observeReveal(document.querySelector('.featured-project'));
+    const media = document.getElementById('featuredMedia');
+    // Lazy-load the thumbnail image itself.
+    const img = media.querySelector('img');
+    if(img){
+      img.addEventListener('load', ()=>{});
+      img.addEventListener('error', ()=>{ media.innerHTML = '<span class="featured-badge">Featured</span>' + fallbackHTML(entry); });
+      img.src = img.dataset.thumbSrc;
+    }
+    // Desktop hover preview.
+    if(!reduceMotion && !isTouch){
+      let hoverTimer=null, frame=null;
+      media.addEventListener('mouseenter', ()=>{
+        if(kind!=='embed') return;
+        hoverTimer = setTimeout(()=>{
+          frame = document.createElement('iframe');
+          frame.setAttribute('allow','autoplay'); frame.setAttribute('frameborder','0'); frame.loading='lazy';
+          frame.style.position='absolute'; frame.style.inset='0';
+          frame.src = withAutoplay(media.dataset.embedSrc);
+          media.appendChild(frame);
+        }, 380);
+      });
+      media.addEventListener('mouseleave', ()=>{
+        clearTimeout(hoverTimer);
+        if(frame){ frame.remove(); frame=null; }
+      });
+    }
+    media.addEventListener('click', ()=>openModal(fullEntry, false, FEATURED_PROJECT.category, FEATURED_PROJECT.index));
     document.getElementById('featuredOpenBtn').addEventListener('click', ()=>jumpToCategorySlot(FEATURED_PROJECT.category, 1));
   }
 
@@ -1067,15 +1175,45 @@ body.loading{overflow:hidden;}
   const navToggle = document.getElementById('navToggle'), navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', ()=>{ const o = navLinks.classList.toggle('open'); navToggle.setAttribute('aria-expanded', o); });
 
-  /* ── MODAL ── */
+  /* ── MODAL (with prev/next navigation through the current category) ── */
   const modal = document.getElementById('previewModal');
   const modalTitle = document.getElementById('modalTitle');
   const modalBody = document.getElementById('modalBody');
   const modalFsBtn = document.getElementById('modalFsBtn');
   const modalClose = document.getElementById('modalClose');
+  const modalPrevBtn = document.getElementById('modalPrevBtn');
+  const modalNextBtn = document.getElementById('modalNextBtn');
   let hideTimer = null;
+  let modalCatKey = null, modalIdx = null;
 
-  function openModal(entry, goFullscreen){
+  function catEntriesWithLinks(catKey){
+    return (PROJECT_LINKS[catKey]||[])
+      .map((e,i)=>({ ...e, __idx:i }))
+      .filter(e=>e.link);
+  }
+  function updateModalNavVisibility(){
+    const hasCat = modalCatKey && PROJECT_LINKS[modalCatKey];
+    const list = hasCat ? catEntriesWithLinks(modalCatKey) : [];
+    const show = list.length > 1;
+    modalPrevBtn.classList.toggle('hidden', !show);
+    modalNextBtn.classList.toggle('hidden', !show);
+  }
+  function navigateModal(dir){
+    if(modalCatKey==null || modalIdx==null) return;
+    const list = catEntriesWithLinks(modalCatKey);
+    const pos = list.findIndex(e=>e.__idx===modalIdx);
+    if(pos===-1 || list.length<2) return;
+    const nextPos = (pos + dir + list.length) % list.length;
+    const nextEntry = list[nextPos];
+    const kind = isDirectVideo(nextEntry.link) ? 'video' : 'embed';
+    openModal({ ...nextEntry, kind }, false, modalCatKey, nextEntry.__idx);
+  }
+  modalPrevBtn.addEventListener('click', ()=>navigateModal(-1));
+  modalNextBtn.addEventListener('click', ()=>navigateModal(1));
+
+  function openModal(entry, goFullscreen, catKey, idx){
+    modalCatKey = catKey !== undefined ? catKey : null;
+    modalIdx = idx !== undefined ? idx : null;
     modalTitle.textContent = entry.title || 'Untitled project';
     if(entry.kind === 'embed'){
       modalBody.innerHTML = `<iframe src="${withAutoplay(toVideoEmbed(entry.link))}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
@@ -1095,6 +1233,7 @@ body.loading{overflow:hidden;}
         </div>`;
       setupCustomPlayer();
     }
+    updateModalNavVisibility();
     modal.classList.add('open');
     modalClose.focus();
     if(goFullscreen) setTimeout(()=>tryFullscreen(modal), 120);
@@ -1145,6 +1284,7 @@ body.loading{overflow:hidden;}
     const v = modalBody.querySelector('video'); if(v) v.pause();
     clearTimeout(hideTimer);
     modalBody.innerHTML = '';
+    modalCatKey = null; modalIdx = null;
     if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
   }
   function tryFullscreen(el){
@@ -1163,7 +1303,12 @@ body.loading{overflow:hidden;}
   });
   modalClose.addEventListener('click', closeModal);
   modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
+  document.addEventListener('keydown', e=>{
+    if(!modal.classList.contains('open')) return;
+    if(e.key==='Escape') closeModal();
+    else if(e.key==='ArrowLeft') navigateModal(-1);
+    else if(e.key==='ArrowRight') navigateModal(1);
+  });
 
   /* ── SCROLL PROGRESS BAR ── */
   const scrollProgressEl = document.getElementById('scrollProgress');
@@ -1216,6 +1361,7 @@ body.loading{overflow:hidden;}
   buildPaletteMenu();
   renderFeaturedProject();
   setActiveTab('longform', { scroll:false });
+  observeReveal(document.querySelector('.about-grid'));
   updateScrollProgress();
   updateFloatingCta();
   if(SITE_CONFIG.brandIconLink) applyBrandIcon(SITE_CONFIG.brandIconLink);
