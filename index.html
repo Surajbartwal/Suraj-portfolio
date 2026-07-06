@@ -229,8 +229,10 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .slot-media .drive-frame.active,.slot-media .hover-video.active{opacity:1;}
 .ratio-badge{position:absolute;top:10px;right:10px;font-size:.68rem;font-weight:700;letter-spacing:.03em;color:rgba(255,255,255,0.9);background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);padding:4px 10px;border-radius:999px;z-index:2;}
 .chip-tag{position:absolute;top:10px;left:10px;font-size:.68rem;font-weight:700;letter-spacing:.03em;color:#fff;background:rgba(139,92,246,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);padding:4px 10px;border-radius:999px;z-index:2;}
-.play-chip{position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;transition:transform .2s,background .2s;pointer-events:none;z-index:2;}
-.slot-media:hover .play-chip{transform:scale(1.15);background:rgba(139,92,246,0.7);}
+.play-chip{position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;transition:transform .2s,background .2s;pointer-events:all;cursor:pointer;z-index:2;}
+.play-chip svg{width:14px;height:14px;}
+.slot-media:hover .play-chip,.play-chip.playing{transform:scale(1.15);background:rgba(139,92,246,0.75);}
+.play-chip:focus-visible{outline:2px solid var(--accent-3);outline-offset:2px;}
 .duration-badge{position:absolute;bottom:10px;left:50px;font-size:.65rem;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:5px;z-index:2;}
 .slot-overlay{position:absolute;right:10px;bottom:10px;display:flex;gap:8px;z-index:3;}
 .overlay-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.28);color:#fff;transform:scale(.7);opacity:0;transition:transform .22s,opacity .22s,background .18s;pointer-events:all;cursor:pointer;}
@@ -963,7 +965,9 @@ body.loading{overflow:hidden;}
         ${thumbEl}
         ${chipTag}
         <span class="ratio-badge">16:9</span>
-        <span class="play-chip">&#9658;</span>
+        <button type="button" class="play-chip" aria-label="Play preview of ${escapeHtml(entry.title||'project')}">
+          <svg class="play-chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
         <div class="slot-overlay">
           <button type="button" class="overlay-btn preview-open-btn" title="Preview" aria-label="Preview ${escapeHtml(entry.title||'project')}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1009,35 +1013,77 @@ body.loading{overflow:hidden;}
     }
   }
 
+  const PLAY_ICON = '<path d="M8 5v14l11-7z"/>';
+  const PAUSE_ICON = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+  function setPlayChipState(media, isPlaying){
+    const chip = media.querySelector('.play-chip');
+    if(!chip) return;
+    chip.classList.toggle('playing', isPlaying);
+    chip.setAttribute('aria-label', isPlaying ? 'Pause preview' : 'Play preview');
+    const icon = chip.querySelector('.play-chip-icon');
+    if(icon) icon.innerHTML = isPlaying ? PAUSE_ICON : PLAY_ICON;
+  }
+
+  /* Starts an inline autoplay preview directly on the card (used by both
+     hover-to-preview on desktop and the explicit play button, which also
+     covers touch devices where hover doesn't apply). */
+  function startInlinePreview(media, kind){
+    if(media.classList.contains('previewing')) return;
+    if(kind === 'embed'){
+      const embedSrc = media.dataset.embedSrc;
+      const frame = document.createElement('iframe');
+      frame.className = 'drive-frame';
+      frame.setAttribute('allow','autoplay');
+      frame.setAttribute('frameborder','0');
+      frame.loading = 'lazy';
+      frame.src = withAutoplay(embedSrc);
+      media.appendChild(frame);
+      requestAnimationFrame(()=>frame.classList.add('active'));
+      media._previewFrame = frame;
+    } else {
+      const video = media.querySelector('.native-poster');
+      if(!video) return;
+      video.loop = true;
+      video.play().catch(()=>{});
+    }
+    media.classList.add('previewing');
+    setPlayChipState(media, true);
+  }
+  function stopInlinePreview(media, kind){
+    if(!media.classList.contains('previewing')) return;
+    if(kind === 'embed'){
+      if(media._previewFrame){ media._previewFrame.remove(); media._previewFrame = null; }
+    } else {
+      const video = media.querySelector('.native-poster');
+      if(video){ video.pause(); video.currentTime = 0; }
+    }
+    media.classList.remove('previewing');
+    setPlayChipState(media, false);
+  }
+
   function bindHoverPreview(wrap, entry, kind){
     if(reduceMotion || isTouch) return;
     const media = wrap.querySelector('.slot-media');
     if(!media) return;
-    let hoverTimer = null, frame = null;
-    if(kind === 'embed'){
-      const embedSrc = media.dataset.embedSrc;
-      media.addEventListener('mouseenter', ()=>{
-        hoverTimer = setTimeout(()=>{
-          frame = document.createElement('iframe');
-          frame.className = 'drive-frame';
-          frame.setAttribute('allow','autoplay');
-          frame.setAttribute('frameborder','0');
-          frame.loading = 'lazy';
-          frame.src = withAutoplay(embedSrc);
-          media.appendChild(frame);
-          requestAnimationFrame(()=>frame && frame.classList.add('active'));
-        }, 380);
-      });
-      media.addEventListener('mouseleave', ()=>{
-        clearTimeout(hoverTimer);
-        if(frame){ frame.remove(); frame = null; }
-      });
-    } else {
-      const video = media.querySelector('.native-poster');
-      if(!video) return;
-      media.addEventListener('mouseenter', ()=>{ video.loop = true; video.play().catch(()=>{}); });
-      media.addEventListener('mouseleave', ()=>{ video.pause(); video.currentTime = 0; });
-    }
+    let hoverTimer = null;
+    media.addEventListener('mouseenter', ()=>{
+      hoverTimer = setTimeout(()=>startInlinePreview(media, kind), 380);
+    });
+    media.addEventListener('mouseleave', ()=>{
+      clearTimeout(hoverTimer);
+      stopInlinePreview(media, kind);
+    });
+  }
+
+  function bindPlayButton(wrap, kind){
+    const media = wrap.querySelector('.slot-media');
+    const chip = wrap.querySelector('.play-chip');
+    if(!media || !chip) return;
+    chip.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(media.classList.contains('previewing')) stopInlinePreview(media, kind);
+      else startInlinePreview(media, kind);
+    });
   }
 
   function renderSlot(catKey, idx, entry){
@@ -1056,6 +1102,7 @@ body.loading{overflow:hidden;}
     observeReveal(wrap);
     bindThumbLoad(wrap, fullEntry, kind);
     bindHoverPreview(wrap, fullEntry, kind);
+    bindPlayButton(wrap, kind);
 
     const previewBtn = wrap.querySelector('.preview-open-btn');
     const fsBtn = wrap.querySelector('.fullscreen-open-btn');
@@ -1148,9 +1195,12 @@ body.loading{overflow:hidden;}
       ? `<img alt="${altText}" loading="lazy" data-thumb-src="${toDriveImageUrl(entry.link,900)}">`
       : `<video src="${entry.link}" muted playsinline preload="metadata" aria-label="${altText}"></video>`;
     wrap.innerHTML = `<div class="featured-project">
-        <div class="featured-media" id="featuredMedia" data-embed-src="${kind==='embed'?toVideoEmbed(entry.link):''}" role="button" tabindex="0" aria-label="Open featured project preview">
+        <div class="featured-media slot-media" id="featuredMedia" data-kind="${kind}" data-embed-src="${kind==='embed'?toVideoEmbed(entry.link):''}" role="button" tabindex="0" aria-label="Open featured project preview">
           <span class="featured-badge">Featured</span>
           ${thumbEl}
+          <button type="button" class="play-chip" aria-label="Play preview of ${escapeHtml(entry.title||'featured project')}">
+            <svg class="play-chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
         </div>
         <div class="featured-copy">
           <span class="eyebrow grad-text" style="font-size:.7rem;">${categories.find(c=>c.key===FEATURED_PROJECT.category)?.label || ''}</span>
@@ -1161,29 +1211,18 @@ body.loading{overflow:hidden;}
       </div>`;
     observeReveal(document.querySelector('.featured-project'));
     const media = document.getElementById('featuredMedia');
+    if(kind === 'video'){
+      const video = media.querySelector('video');
+      if(video) video.classList.add('native-poster');
+    }
     const img = media.querySelector('img');
     if(img){
       img.addEventListener('load', ()=>{});
       img.addEventListener('error', ()=>{ media.innerHTML = '<span class="featured-badge">Featured</span>' + fallbackHTML(entry); });
       img.src = img.dataset.thumbSrc;
     }
-    if(!reduceMotion && !isTouch){
-      let hoverTimer=null, frame=null;
-      media.addEventListener('mouseenter', ()=>{
-        if(kind!=='embed') return;
-        hoverTimer = setTimeout(()=>{
-          frame = document.createElement('iframe');
-          frame.setAttribute('allow','autoplay'); frame.setAttribute('frameborder','0'); frame.loading='lazy';
-          frame.style.position='absolute'; frame.style.inset='0';
-          frame.src = withAutoplay(media.dataset.embedSrc);
-          media.appendChild(frame);
-        }, 380);
-      });
-      media.addEventListener('mouseleave', ()=>{
-        clearTimeout(hoverTimer);
-        if(frame){ frame.remove(); frame=null; }
-      });
-    }
+    bindHoverPreview({ querySelector:(sel)=> sel==='.slot-media' ? media : null }, fullEntry, kind);
+    bindPlayButton({ querySelector:(sel)=> sel==='.slot-media' ? media : (sel==='.play-chip' ? media.querySelector('.play-chip') : null) }, kind);
     media.addEventListener('click', ()=>openModal(fullEntry, false, FEATURED_PROJECT.category, FEATURED_PROJECT.index));
     media.addEventListener('keydown', e=>{
       if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(fullEntry, false, FEATURED_PROJECT.category, FEATURED_PROJECT.index); }
