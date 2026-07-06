@@ -107,8 +107,6 @@ html.snap-scroll .hero,html.snap-scroll section{scroll-snap-align:start;}
 @keyframes drift1{from{transform:translate(0,0);}to{transform:translate(60px,40px);}}
 @keyframes drift2{from{transform:translate(0,0);}to{transform:translate(-50px,50px);}}
 @keyframes drift3{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,-30px) scale(1.1);}}
-.hero-spotlight{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(460px circle at var(--spot-x,50%) var(--spot-y,25%),rgba(139,92,246,0.18),transparent 70%);transition:background .18s ease-out;}
-@media(hover:none){.hero-spotlight{display:none;}}
 .hero-inner{position:relative;z-index:1;text-align:center;}
 .pill-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;font-size:.8rem;color:var(--text-dim);margin-bottom:28px;background:rgba(255,255,255,0.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border-strong);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);}
 .pill-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-3);box-shadow:0 0 10px var(--accent-3);animation:dotPulse 2s ease-in-out infinite;}
@@ -134,8 +132,8 @@ html.snap-scroll .hero,html.snap-scroll section{scroll-snap-align:start;}
 .stat-icon{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(139,92,246,0.22),rgba(34,211,238,0.12));color:var(--accent-3);}
 .stat-icon svg{width:16px;height:16px;}
 .stat-text{text-align:left;}
-.stat-text b{display:block;font-size:.9rem;color:var(--text);font-weight:700;line-height:1.25;}
-.stat-text .stat-label{display:block;font-size:.68rem;color:var(--text-faint);letter-spacing:.02em;}
+.stat-text b{display:block;font-size:.9rem;color:#ffffff;font-weight:700;line-height:1.25;}
+.stat-text .stat-label{display:block;font-size:.68rem;color:var(--text-dim);letter-spacing:.02em;}
 .count-num{font-variant-numeric:tabular-nums;}
 
 /* ── SECTIONS ── */
@@ -207,7 +205,7 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .cat-grid.list-view .slot-title{white-space:normal;}
 .list-tags{display:none;gap:6px;flex-wrap:wrap;}
 .cat-grid.list-view .list-tags{display:flex;}
-.list-tag{font-size:.68rem;font-weight:600;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid var(--border-mid);color:var(--text-faint);}
+.list-tag{font-size:.68rem;font-weight:700;letter-spacing:.03em;padding:4px 10px;border-radius:999px;background:rgba(139,92,246,0.6);border:1px solid rgba(255,255,255,0.18);color:#fff;}
 
 /* ── CARD SHELL ── */
 .upload-slot{border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;min-height:240px;position:relative;transition:border-color .25s,transform .25s,box-shadow .25s;}
@@ -220,10 +218,6 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .upload-slot.jump-highlight{animation:jumpPulse 1.6s ease;}
 @keyframes jumpPulse{0%{box-shadow:0 0 0 0 rgba(139,92,246,0);border-color:var(--border-mid);}15%{box-shadow:0 0 0 6px rgba(139,92,246,0.35);border-color:rgba(139,92,246,0.7);}100%{box-shadow:0 0 0 0 rgba(139,92,246,0);border-color:var(--border-mid);}}
 
-/* ── NEW BADGE ── */
-.new-badge{position:absolute;top:10px;right:10px;font-size:.62rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--gradient);background-size:300% 300%;animation:gradientFlow 7s ease infinite;color:#06060e;z-index:3;}
-.cat-grid.list-view .new-badge{position:static;display:inline-block;margin-left:0;}
-
 /* ── MEDIA AREA ── */
 .slot-media{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#0b0b12;flex-shrink:0;}
 .slot-media .thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;filter:blur(6px);transition:opacity .18s ease,transform .3s ease,filter .18s ease;background:linear-gradient(100deg,rgba(255,255,255,0.03) 30%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 70%);background-size:200% 100%;}
@@ -233,8 +227,8 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 .slot-media .drive-frame,.slot-media .hover-video{position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;transition:opacity .25s ease;pointer-events:none;z-index:1;}
 .slot-media .drive-frame.active,.slot-media .hover-video.active{opacity:1;}
-.ratio-badge{position:absolute;top:10px;right:10px;font-size:.65rem;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,0.9);background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);padding:3px 8px;border-radius:6px;z-index:2;}
-.chip-tag{position:absolute;top:10px;left:10px;font-size:.65rem;font-weight:700;letter-spacing:.03em;color:#fff;background:rgba(139,92,246,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);padding:4px 10px;border-radius:999px;z-index:2;}
+.ratio-badge{position:absolute;top:10px;right:10px;font-size:.68rem;font-weight:700;letter-spacing:.03em;color:rgba(255,255,255,0.9);background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.14);padding:4px 10px;border-radius:999px;z-index:2;}
+.chip-tag{position:absolute;top:10px;left:10px;font-size:.68rem;font-weight:700;letter-spacing:.03em;color:#fff;background:rgba(139,92,246,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);padding:4px 10px;border-radius:999px;z-index:2;}
 .play-chip{position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;transition:transform .2s,background .2s;pointer-events:none;z-index:2;}
 .slot-media:hover .play-chip{transform:scale(1.15);background:rgba(139,92,246,0.7);}
 .duration-badge{position:absolute;bottom:10px;left:50px;font-size:.65rem;font-weight:700;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:5px;z-index:2;}
@@ -274,7 +268,8 @@ h2.section-title{font-size:clamp(1.75rem,3vw,2.4rem);font-weight:700;letter-spac
 .contact-card{position:relative;overflow:hidden;border-radius:var(--radius-xl);padding:80px 44px;text-align:center;background:var(--gradient);background-size:300% 300%;animation:gradientFlow 9s ease infinite;color:#06060e;}
 .contact-card h2{position:relative;z-index:1;font-size:clamp(1.8rem,3.8vw,2.9rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px;}
 .contact-card p{position:relative;z-index:1;opacity:.75;max-width:460px;margin:0 auto 32px;}
-.contact-card .cta-row{position:relative;z-index:1;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.contact-card .cta-row{position:relative;z-index:1;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:640px;margin:0 auto;}
+.contact-card .cta-row .btn{flex:1 1 200px;max-width:260px;}
 
 /* ── FOOTER ── */
 footer{padding:44px 0 26px;}
@@ -332,16 +327,6 @@ footer{padding:44px 0 26px;}
 #debugPanel h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:8px;}
 #debugPanel .debug-row{display:flex;justify-content:space-between;gap:10px;padding:2px 0;}
 
-/* ── PRINT CONTACT CARD ── */
-.print-card{display:none;}
-@media print{
-  body *{visibility:hidden;}
-  .print-card,.print-card *{visibility:visible;}
-  .print-card{display:block;position:absolute;top:0;left:0;width:100%;padding:40px;color:#000;background:#fff;}
-  .print-card h2{font-size:1.6rem;margin-bottom:6px;}
-  .print-card p{font-size:.95rem;margin-bottom:4px;color:#222;}
-}
-
 /* ── PALETTE SWITCHER ── */
 .palette-btn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.07);border:1px solid var(--border-mid);color:var(--text-dim);flex-shrink:0;transition:background .18s,color .18s,border-color .18s,transform .18s;position:relative;}
 .palette-btn:hover{background:rgba(255,255,255,0.14);color:var(--text);transform:translateY(-1px);}
@@ -386,6 +371,7 @@ body.loading{overflow:hidden;}
   .floating-cta{right:14px;bottom:14px;}
   .palette-menu{right:-8px;}
   .cat-grid.list-view .slot-media{width:90px;}
+  .contact-card .cta-row .btn{flex:1 1 140px;}
 }
 @media(max-width:640px){section{padding:70px 0;}.contact-card{padding:50px 22px;}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{animation-duration:.001ms!important;animation-iteration-count:1!important;}.slot-media .thumb-img.loading-bg{animation:none;}}
@@ -443,7 +429,6 @@ body.loading{overflow:hidden;}
 <!-- HERO -->
 <header class="hero" id="hero">
   <div class="aurora"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
-  <div class="hero-spotlight" id="heroSpotlight"></div>
   <div class="container hero-inner">
     <span class="pill-badge"><span class="dot"></span>Open to freelance &amp; full-time work</span>
     <h1 id="heroHeadline">
@@ -626,20 +611,10 @@ body.loading{overflow:hidden;}
         </button>
         <a class="btn btn-glass" href="https://drive.google.com/file/d/1jaxuIa1ZkGgL5Vd7zo6RLWl1KHU4fKlz/preview" style="color:#06060e;border-color:rgba(6,6,14,0.35);">View Resume</a>
         <a class="btn btn-glass" href="https://drive.google.com/uc?export=download&amp;id=1jaxuIa1ZkGgL5Vd7zo6RLWl1KHU4fKlz" style="color:#06060e;border-color:rgba(6,6,14,0.35);">Download PDF</a>
-        <button type="button" class="btn btn-glass" id="printCardBtn" style="color:#06060e;border-color:rgba(6,6,14,0.35);">Print Contact Card</button>
       </div>
     </div>
   </div>
 </section>
-
-<!-- PRINT-ONLY QUICK CONTACT CARD -->
-<div class="print-card">
-  <h2>Suraj Singh Bartwal</h2>
-  <p>Video Editor &amp; Motion Graphics Designer</p>
-  <p>Email: surajbartwal101@gmail.com</p>
-  <p>Phone: +91 95845 30805</p>
-  <p>Based in Delhi, India</p>
-</div>
 
 <!-- FOOTER -->
 <footer>
@@ -700,55 +675,6 @@ body.loading{overflow:hidden;}
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = window.matchMedia('(hover: none)').matches;
 
-  /* ==============================================================
-     ★ EDIT YOUR PORTFOLIO HERE — this is the ONLY place you need
-       to touch. There is no admin UI on the live site anymore;
-       everything is controlled from this code block.
-
-     SITE_CONFIG.brandIconLink   → nav logo + browser tab favicon
-     SITE_CONFIG.profilePhotoLink → About section headshot
-     SITE_CONFIG.loadingScreenDurationMs → how long the loader stays
-       on screen (minimum time) before the site reveals itself and
-       the hero headline plays its intro animation. Raise this if
-       you want a longer, more deliberate loading moment; the
-       loader will never show for less than this, and only longer
-       if the page itself is still fetching. Set to 0 to disable
-       the minimum hold and just show the loader for as long as
-       the page actually takes to be ready.
-     SITE_CONFIG.enableScrollSnap → optional desktop-only section
-       snapping while scrolling. Off by default since it can feel
-       heavy on long pages — flip to true to try it.
-
-     PROJECT_LINKS.<category>[slot] → { title, link, tag, meta, chip, isNew }
-       - Google Drive share link  → shows a fast-loading thumbnail
-         first; hovering (desktop) swaps in a live autoplay preview,
-         clicking always opens the full modal player.
-       - Direct video file URL (.mp4/.webm/.mov) → uses the built-in
-         custom player: the video file itself is the thumbnail
-         (paused on first frame), hover/click autoplay + a minimal
-         control bar (play/pause, seek, mute) that auto-hides while
-         playing and reappears on tap/mousemove.
-       - Leave "link" empty ('') to show a "Coming soon" slot.
-       - tag: 'ai' or 'traditional' — powers the filter pills above the grid.
-       - meta: short one-line caption shown under the title (tools used,
-         result, etc). Leave '' to hide it.
-       - chip: short 1-3 word label badge shown on the thumbnail itself
-         (e.g. "Case Study", "Ad", "Reel"). Leave '' to hide it.
-       - isNew: true → shows a small "New" badge on the thumbnail so
-         visitors can see the portfolio is actively maintained.
-
-     FEATURED_PROJECT → picks one entry above to spotlight at the top
-       of the Work section. Set to null to hide it entirely.
-
-     PALETTES → the color-theme options offered from the palette
-       button in the nav (paint-bucket icon, top right). Each entry
-       maps to a set of CSS variables. Add / remove / rename entries
-       freely; the button + dropdown menu build themselves from this
-       list automatically. The visitor's last pick is remembered
-       (localStorage) so it persists across visits. First-time
-       visitors whose OS is set to light mode get the "daylight"
-       palette automatically instead of DEFAULT_PALETTE.
-     ============================================================== */
   const SITE_CONFIG = {
     brandIconLink: 'https://drive.google.com/file/d/1TgIbPZkGHdEC8VrTIkYBRc7U3vcJVWEw/preview',
     profilePhotoLink: 'https://drive.google.com/file/d/1CbU0bMw47duakkvSp3g1D5c9IiN2xti_/preview',
@@ -771,15 +697,11 @@ body.loading{overflow:hidden;}
   ];
   const PALETTE_STORAGE_KEY = 'suraj-portfolio-palette';
   const DEBUG_STORAGE_KEY = 'suraj-portfolio-category-views';
-  // Which palette (by "key" above) loads for first-time visitors who
-  // don't get the daylight auto-detect. Once someone picks a theme
-  // from the nav button, their choice is remembered and overrides
-  // this on their return visits.
   const DEFAULT_PALETTE = 'forest';
 
   const PROJECT_LINKS = {
     ai: [
-      { title: 'Job Search Ad', link: 'https://drive.google.com/file/d/1SuVqf7DJz9ivEwWyoSIhSACkUiVwt8Wn/preview', tag:'ai', meta:'AI-generated · composited in After Effects', chip:'Ad', isNew:true },
+      { title: 'Job Search Ad', link: 'https://drive.google.com/file/d/1SuVqf7DJz9ivEwWyoSIhSACkUiVwt8Wn/preview', tag:'ai', meta:'AI-generated · composited in After Effects', chip:'Ad' },
       { title: 'AI Candy Ad', link: 'https://drive.google.com/file/d/1-3RqVKswi-BlZ0XMivLqal-Q5MKHvk9v/preview', tag:'ai', meta:'Kling AI · Nano Banana', chip:'Ad' },
       { title: 'Gym Ad', link: 'https://drive.google.com/file/d/1aOO0ybqhwjjlMVpcCD-oCdgwa1JM4a3v/preview', tag:'ai', meta:'Veo 3 · Premiere Pro finish', chip:'Ad' },
       { title: 'UGC AI Ad', link: 'https://drive.google.com/file/d/1oQ1kqWHNW0tfJtA3-FXQWnoAfKjEKOUm/preview', tag:'ai', meta:'AI-generated UGC style', chip:'UGC' },
@@ -787,7 +709,7 @@ body.loading{overflow:hidden;}
       { title: 'HDFC Ad Trial', link: 'https://drive.google.com/file/d/1RgdtvqUAmUVTEjqXagVmLfGc-XqMYMbj/preview', tag:'ai', meta:'AI concept ad trial', chip:'Concept' },
     ],
     saas: [
-      { title: 'AY Connect', link: 'https://drive.google.com/file/d/1FTOhlh3xEteJB1y3y9NL1-lTGMD8Ew2t/preview', tag:'traditional', meta:'Product walkthrough · Premiere Pro', chip:'Walkthrough', isNew:true },
+      { title: 'AY Connect', link: 'https://drive.google.com/file/d/1FTOhlh3xEteJB1y3y9NL1-lTGMD8Ew2t/preview', tag:'traditional', meta:'Product walkthrough · Premiere Pro', chip:'Walkthrough' },
       { title: 'Allergy App', link: 'https://drive.google.com/file/d/1KNGoBnOHBdnshmEbo8siXRsQP0mUm6CC/preview', tag:'traditional', meta:'Feature explainer · After Effects', chip:'Explainer' },
       { title: 'Project 3', link: '', tag:'traditional', meta:'', chip:'' },
       { title: 'Project 4', link: '', tag:'traditional', meta:'', chip:'' },
@@ -915,8 +837,6 @@ body.loading{overflow:hidden;}
     if(saved && PALETTES.some(p=>p.key===saved)){
       applyPalette(saved, { skipSave:true });
     } else {
-      // First-time visitor: respect OS light-mode preference before
-      // falling back to the configured default.
       const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
       applyPalette(prefersLight ? 'daylight' : DEFAULT_PALETTE, { skipSave:true });
     }
@@ -933,11 +853,6 @@ body.loading{overflow:hidden;}
     playHeroIntro();
   }
   function initLoadingScreen(){
-    // Loader always shows for at least SITE_CONFIG.loadingScreenDurationMs,
-    // regardless of how fast the page itself is ready. It never blocks on
-    // video embeds — those load lazily as thumbnails — so raising this
-    // number only affects the loader's own on-screen time, not real load
-    // speed.
     const minShow = reduceMotion ? Math.min(150, SITE_CONFIG.loadingScreenDurationMs) : SITE_CONFIG.loadingScreenDurationMs;
     const start = Date.now();
     let finished = false;
@@ -950,7 +865,6 @@ body.loading{overflow:hidden;}
     }
     if(document.readyState === 'complete'){ finish(); }
     else { window.addEventListener('load', finish); }
-    // Hard safety net so the loader never gets stuck open.
     setTimeout(finish, Math.max(2200, minShow + 400));
   }
 
@@ -976,20 +890,6 @@ body.loading{overflow:hidden;}
         if(p < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-    });
-  }
-
-  /* ── CURSOR-FOLLOWING HERO SPOTLIGHT (desktop only) ── */
-  function bindHeroSpotlight(){
-    if(reduceMotion || isTouch) return;
-    const hero = document.getElementById('hero');
-    if(!hero) return;
-    hero.addEventListener('mousemove', e=>{
-      const rect = hero.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      hero.style.setProperty('--spot-x', x + '%');
-      hero.style.setProperty('--spot-y', y + '%');
     });
   }
 
@@ -1052,10 +952,9 @@ body.loading{overflow:hidden;}
   function filledSlotHTML(entry){
     const kind = entry.kind;
     const chipTag = entry.chip ? `<span class="chip-tag">${escapeHtml(entry.chip)}</span>` : '';
-    const newBadge = entry.isNew ? `<span class="new-badge">New</span>` : '';
     const metaLine = entry.meta ? `<span class="slot-meta">${escapeHtml(entry.meta)}</span>` : '';
     const tagLabel = entry.tag === 'ai' ? 'AI-Generated' : 'Traditional Edit';
-    const listTags = `<span class="list-tags"><span class="list-tag">${escapeHtml(tagLabel)}</span>${entry.chip?`<span class="list-tag">${escapeHtml(entry.chip)}</span>`:''}${entry.isNew?`<span class="new-badge">New</span>`:''}</span>`;
+    const listTags = `<span class="list-tags"><span class="list-tag">${escapeHtml(tagLabel)}</span>${entry.chip?`<span class="list-tag">${escapeHtml(entry.chip)}</span>`:''}</span>`;
     const altText = escapeHtml((entry.title||'Untitled project') + ' preview thumbnail');
     const thumbEl = kind === 'embed'
       ? `<img class="thumb-img loading-bg" alt="${altText}" loading="lazy" data-thumb-src="${toDriveImageUrl(entry.link,800)}">`
@@ -1063,7 +962,6 @@ body.loading{overflow:hidden;}
     return `<div class="slot-media" data-kind="${kind}" data-embed-src="${kind==='embed'?toVideoEmbed(entry.link):''}" role="button" tabindex="0" aria-label="Open ${escapeHtml(entry.title||'project')} preview">
         ${thumbEl}
         ${chipTag}
-        ${newBadge}
         <span class="ratio-badge">16:9</span>
         <span class="play-chip">&#9658;</span>
         <div class="slot-overlay">
@@ -1081,8 +979,6 @@ body.loading{overflow:hidden;}
       </div>`;
   }
 
-  /* Loads the thumbnail image lazily (only once it's near the viewport)
-     and reports success/failure immediately — no 9-second guessing. */
   function bindThumbLoad(wrap, entry, kind){
     const media = wrap.querySelector('.slot-media');
     if(!media) return;
@@ -1113,10 +1009,6 @@ body.loading{overflow:hidden;}
     }
   }
 
-  /* Desktop-only hover preview: after a short dwell, swap in a live
-     autoplay layer over the thumbnail. Never runs on touch devices or
-     with reduced motion, and the layer is destroyed on mouse-leave so
-     nothing keeps streaming in the background. */
   function bindHoverPreview(wrap, entry, kind){
     if(reduceMotion || isTouch) return;
     const media = wrap.querySelector('.slot-media');
@@ -1178,9 +1070,6 @@ body.loading{overflow:hidden;}
     }
   }
 
-  /* Builds empty skeleton shells for every category up front, but only
-     renders real thumbnails for the active category. Other categories
-     render lazily the first time their tab is opened. */
   function buildGrids(){
     categories.forEach(cat=>{
       const grid = document.getElementById('grid-'+cat.key);
@@ -1213,7 +1102,6 @@ body.loading{overflow:hidden;}
     });
   }
 
-  /* ── FILTER PILLS (AI-Generated vs Traditional Edit) ── */
   function applyFilter(){
     document.querySelectorAll('.upload-slot').forEach(wrap=>{
       if(currentFilter === 'all'){
@@ -1235,7 +1123,6 @@ body.loading{overflow:hidden;}
     });
   }
 
-  /* ── GRID / LIST VIEW TOGGLE ── */
   function applyView(){
     document.querySelectorAll('.cat-grid').forEach(g=>g.classList.toggle('list-view', currentView==='list'));
   }
@@ -1249,7 +1136,6 @@ body.loading{overflow:hidden;}
     });
   }
 
-  /* ── FEATURED PROJECT (also thumbnail-first) ── */
   function renderFeaturedProject(){
     if(!FEATURED_PROJECT) return;
     const entry = (PROJECT_LINKS[FEATURED_PROJECT.category]||[])[FEATURED_PROJECT.index];
@@ -1275,14 +1161,12 @@ body.loading{overflow:hidden;}
       </div>`;
     observeReveal(document.querySelector('.featured-project'));
     const media = document.getElementById('featuredMedia');
-    // Lazy-load the thumbnail image itself.
     const img = media.querySelector('img');
     if(img){
       img.addEventListener('load', ()=>{});
       img.addEventListener('error', ()=>{ media.innerHTML = '<span class="featured-badge">Featured</span>' + fallbackHTML(entry); });
       img.src = img.dataset.thumbSrc;
     }
-    // Desktop hover preview.
     if(!reduceMotion && !isTouch){
       let hoverTimer=null, frame=null;
       media.addEventListener('mouseenter', ()=>{
@@ -1307,9 +1191,6 @@ body.loading{overflow:hidden;}
     document.getElementById('featuredOpenBtn').addEventListener('click', ()=>jumpToCategorySlot(FEATURED_PROJECT.category, 1));
   }
 
-  /* Switches to the given category tab (rendering it if needed), then
-     smooth-scrolls to a specific slot within its grid and gives it a
-     brief highlight pulse so it's obvious where the view landed. */
   function jumpToCategorySlot(catKey, slotIdx){
     setActiveTab(catKey);
     requestAnimationFrame(()=>{
@@ -1324,7 +1205,6 @@ body.loading{overflow:hidden;}
     });
   }
 
-  /* ── SWIPEABLE CATEGORY SWITCHER ── */
   const blurbEl = document.getElementById('categoryBlurb');
   const tabCountEl = document.getElementById('tabCount');
   const grids = Array.from(document.querySelectorAll('.cat-grid'));
@@ -1343,7 +1223,6 @@ body.loading{overflow:hidden;}
   });
   const dots = Array.from(document.querySelectorAll('.cat-dot'));
 
-  /* ── LOCALSTORAGE-ONLY CATEGORY-VIEW ANALYTICS (?debug=1 to view) ── */
   function trackCategoryView(catKey){
     let counts = {};
     try{ counts = JSON.parse(localStorage.getItem(DEBUG_STORAGE_KEY) || '{}'); }catch(e){}
@@ -1383,7 +1262,6 @@ body.loading{overflow:hidden;}
   catCards.forEach(c=>c.addEventListener('click', ()=>setActiveTab(c.dataset.cat)));
   dots.forEach(d=>d.addEventListener('click', ()=>setActiveTab(d.dataset.cat)));
 
-  /* Keyboard navigation for the category switcher */
   catSwitcher.setAttribute('tabindex','0');
   catSwitcher.addEventListener('keydown', e=>{
     if(e.key === 'ArrowRight'){ e.preventDefault(); catNext.click(); }
@@ -1418,7 +1296,6 @@ body.loading{overflow:hidden;}
     setActiveTab(categories[(idx+1)%categories.length].key);
   });
 
-  /* ── NAV ── */
   document.querySelectorAll('[data-target]').forEach(el=>{
     el.addEventListener('click', e=>{
       const t = document.querySelector(el.getAttribute('data-target'));
@@ -1428,7 +1305,6 @@ body.loading{overflow:hidden;}
   const navToggle = document.getElementById('navToggle'), navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', ()=>{ const o = navLinks.classList.toggle('open'); navToggle.setAttribute('aria-expanded', o); });
 
-  /* ── COPY-TO-CLIPBOARD TOAST ── */
   let toastTimer = null;
   function showToast(msg){
     const toast = document.getElementById('copyToast');
@@ -1457,10 +1333,7 @@ body.loading{overflow:hidden;}
   }
   const copyEmailBtn = document.getElementById('copyEmailBtn');
   if(copyEmailBtn) copyEmailBtn.addEventListener('click', ()=>copyText('surajbartwal101@gmail.com', 'Email copied to clipboard'));
-  const printCardBtn = document.getElementById('printCardBtn');
-  if(printCardBtn) printCardBtn.addEventListener('click', ()=>window.print());
 
-  /* ── MODAL (with prev/next navigation, slideshow, copy-link, deep links) ── */
   const modal = document.getElementById('previewModal');
   const modalTitle = document.getElementById('modalTitle');
   const modalBody = document.getElementById('modalBody');
@@ -1514,8 +1387,6 @@ body.loading{overflow:hidden;}
     if(video){
       video.addEventListener('ended', slideshowAdvanceHandler);
     } else {
-      // Embedded Drive iframes don't expose playback end events, so
-      // fall back to a fixed dwell time per project.
       slideshowTimer = setTimeout(()=>{ if(slideshowActive) navigateModal(1); }, 8000);
     }
   }
@@ -1665,7 +1536,6 @@ body.loading{overflow:hidden;}
     }, 80);
   }
 
-  /* ── SCROLL PROGRESS BAR ── */
   const scrollProgressEl = document.getElementById('scrollProgress');
   function updateScrollProgress(){
     const doc = document.documentElement;
@@ -1675,7 +1545,6 @@ body.loading{overflow:hidden;}
     if(scrollProgressEl) scrollProgressEl.style.width = pct + '%';
   }
 
-  /* ── ACTIVE NAV LINK ON SCROLL ── */
   const navSections = ['hero','work','about','stack','contact']
     .map(id=>document.getElementById(id)).filter(Boolean);
   const navLinkEls = Array.from(document.querySelectorAll('.nav-links a[data-target]'));
@@ -1689,7 +1558,6 @@ body.loading{overflow:hidden;}
   }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
   navSections.forEach(sec=>navObserver.observe(sec));
 
-  /* ── FLOATING "HIRE ME" CTA ── */
   const floatingCta = document.getElementById('floatingCta');
   const heroEl = document.getElementById('hero');
   function updateFloatingCta(){
@@ -1711,6 +1579,10 @@ body.loading{overflow:hidden;}
   window.addEventListener('scroll', onScroll, { passive:true });
 
   /* ── INIT ── */
+  // Ensure every fresh load / reload starts pinned at the very top of the
+  // page, regardless of scroll restoration or a leftover #project hash.
+  if('scrollRestoration' in history){ history.scrollRestoration = 'manual'; }
+  window.scrollTo(0,0);
   buildGrids();
   updateCategoryBadges();
   bindFilterPills();
@@ -1721,11 +1593,11 @@ body.loading{overflow:hidden;}
   observeReveal(document.querySelector('.about-grid'));
   updateScrollProgress();
   updateFloatingCta();
-  bindHeroSpotlight();
   if(SITE_CONFIG.enableScrollSnap) document.documentElement.classList.add('snap-scroll');
   if(SITE_CONFIG.brandIconLink) applyBrandIcon(SITE_CONFIG.brandIconLink);
   if(SITE_CONFIG.profilePhotoLink) applyProfilePhoto(SITE_CONFIG.profilePhotoLink);
   initLoadingScreen();
+  window.addEventListener('load', ()=>{ window.scrollTo(0,0); });
   if(window.location.hash.includes('#project=')) openFromHash();
 
 })();
