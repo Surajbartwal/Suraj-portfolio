@@ -302,6 +302,13 @@ footer{padding:44px 0 26px;}
 .modal-hint kbd{background:rgba(255,255,255,0.08);border:1px solid var(--border-mid);border-radius:4px;padding:1px 6px;font-family:inherit;font-size:.7rem;}
 @media(max-width:960px){.modal-nav-btn.prev{left:8px;}.modal-nav-btn.next{right:8px;}.modal-nav-btn{background:rgba(0,0,0,0.5);}}
 
+/* ── EMBED PLAYER (Google Drive iframe, one-tap start) ── */
+.embed-wrap{position:relative;width:100%;background:#000;}
+.embed-wrap iframe{width:100%;height:72vh;border:none;display:block;transition:opacity .3s ease;}
+.embed-poster{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(20,20,30,0.55),rgba(0,0,0,0.85));cursor:pointer;transition:opacity .3s ease;}
+.embed-poster-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:.78rem;color:rgba(255,255,255,0.65);letter-spacing:.02em;}
+@media(max-width:760px){.embed-wrap iframe{height:56vw;max-height:60vh;}}
+
 /* ── CUSTOM PLAYER (self-hosted video only) ── */
 .player-wrap{position:relative;}
 .player-wrap video{width:100%;display:block;background:#000;}
@@ -316,6 +323,11 @@ footer{padding:44px 0 26px;}
 .player-spinner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,0.18);border-top-color:#fff;opacity:0;pointer-events:none;transition:opacity .15s ease;z-index:4;animation:playerSpin .8s linear infinite;}
 .player-spinner.visible{opacity:1;}
 @keyframes playerSpin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+@media(max-width:760px){
+  .player-center-btn{width:76px;height:76px;}
+  .player-center-btn svg{width:32px;height:32px;}
+  .player-fs-btn{width:46px;height:46px;opacity:1;transform:translateY(0);pointer-events:all;}
+}
 
 /* ── FLOATING CTA ── */
 .floating-cta{position:fixed;right:20px;bottom:20px;z-index:900;opacity:0;transform:translateY(14px) scale(.95);pointer-events:none;transition:opacity .25s ease,transform .25s ease;box-shadow:0 10px 34px rgba(139,92,246,0.45);}
@@ -1399,7 +1411,16 @@ body.loading{overflow:hidden;}
     modalIdx = idx !== undefined ? idx : null;
     modalTitle.textContent = entry.title || 'Untitled project';
     if(entry.kind === 'embed'){
-      modalBody.innerHTML = `<iframe src="${withAutoplay(toVideoEmbed(entry.link))}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen title="${escapeHtml(entry.title||'Project preview')}"></iframe>`;
+      modalBody.innerHTML = `<div class="embed-wrap" id="embedWrap">
+          <iframe id="embedFrame" data-src="${withAutoplay(toVideoEmbed(entry.link))}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${escapeHtml(entry.title||'Project preview')}"></iframe>
+          <div class="embed-poster" id="embedPoster" role="button" tabindex="0" aria-label="Play ${escapeHtml(entry.title||'video')}">
+            <button type="button" class="player-center-btn" id="embedPlayBtn" aria-label="Play video">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <span class="embed-poster-hint">Tap to play</span>
+          </div>
+        </div>`;
+      setupEmbedPlayer();
     } else {
       modalBody.innerHTML = `<div class="player-wrap" id="playerWrap">
           <div class="player-spinner" id="playerSpinner"></div>
@@ -1422,6 +1443,33 @@ body.loading{overflow:hidden;}
     if(goFullscreen) setTimeout(()=>tryFullscreen(modal), 120);
     if(opts.keepSlideshow && slideshowActive) armSlideshowAdvance();
     else if(!opts.keepSlideshow) { slideshowActive = false; modalSlideshowBtn.classList.remove('active'); clearSlideshowTimer(); }
+  }
+
+  /* ── ONE-TAP EMBED PLAYER (Google Drive iframes) ──
+     Drive's own player often needs a second, hard-to-find tap on its tiny
+     internal play icon, and that tap can silently do nothing on mobile.
+     Instead we show one big obvious "Tap to play" button; the tap itself
+     is what sets the iframe src (with autoplay=1&mute=1), so the browser
+     treats it as a direct user gesture and starts playback reliably. */
+  function setupEmbedPlayer(){
+    const poster = document.getElementById('embedPoster');
+    const playBtn = document.getElementById('embedPlayBtn');
+    const frame = document.getElementById('embedFrame');
+    if(!poster || !frame) return;
+    let activated = false;
+    function activate(){
+      if(activated) return;
+      activated = true;
+      frame.src = frame.dataset.src;
+      poster.style.opacity = '0';
+      poster.style.pointerEvents = 'none';
+      setTimeout(()=>{ if(poster.parentNode) poster.style.display = 'none'; }, 320);
+    }
+    poster.addEventListener('click', activate);
+    poster.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(); }
+    });
+    if(playBtn) playBtn.addEventListener('click', e=>{ e.stopPropagation(); activate(); });
   }
 
   /* ── MINIMAL, FAST, MOBILE/iOS-OPTIMIZED CUSTOM PLAYER ──
@@ -1463,20 +1511,28 @@ body.loading{overflow:hidden;}
       showSpinner(true);
       const p = video.play();
       if(p !== undefined){
-        p.then(()=>{ showSpinner(false); }).catch(()=>{
-          // Autoplay blocked entirely (rare once muted) — surface a single tap-to-play button
+        p.then(()=>{
+          showSpinner(false);
+          centerBtn.classList.add('hidden');
+        }).catch(()=>{
+          // Playback blocked or failed — keep/restore the button so the
+          // user always has a working, visible way to retry (this is the
+          // fix for "pressing play does nothing"; previously the button
+          // hid itself before we knew play() actually succeeded).
           showSpinner(false);
           centerBtn.classList.remove('hidden');
         });
+      } else {
+        showSpinner(false);
       }
     }
 
     function togglePlay(){
       if(video.paused){
-        centerBtn.classList.add('hidden');
-        video.play().catch(()=>{});
+        attemptPlay();
       } else {
         video.pause();
+        centerBtn.classList.remove('hidden');
       }
       wake();
     }
