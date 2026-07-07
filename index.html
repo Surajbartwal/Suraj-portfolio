@@ -1414,10 +1414,11 @@ body.loading{overflow:hidden;}
       modalBody.innerHTML = `<div class="embed-wrap" id="embedWrap">
           <iframe id="embedFrame" data-src="${withAutoplay(toVideoEmbed(entry.link))}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${escapeHtml(entry.title||'Project preview')}"></iframe>
           <div class="embed-poster" id="embedPoster" role="button" tabindex="0" aria-label="Play ${escapeHtml(entry.title||'video')}">
+            <div class="player-spinner" id="embedSpinner"></div>
             <button type="button" class="player-center-btn" id="embedPlayBtn" aria-label="Play video">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <span class="embed-poster-hint">Tap to play</span>
+            <span class="embed-poster-hint" id="embedPosterHint">Tap to play</span>
           </div>
         </div>`;
       setupEmbedPlayer();
@@ -1454,16 +1455,30 @@ body.loading{overflow:hidden;}
   function setupEmbedPlayer(){
     const poster = document.getElementById('embedPoster');
     const playBtn = document.getElementById('embedPlayBtn');
+    const hint = document.getElementById('embedPosterHint');
+    const spinner = document.getElementById('embedSpinner');
     const frame = document.getElementById('embedFrame');
     if(!poster || !frame) return;
     let activated = false;
     function activate(){
       if(activated) return;
       activated = true;
+      playBtn.classList.add('hidden');
+      hint.textContent = 'Loading…';
+      spinner.classList.add('visible');
+      // Only start fading the poster once the iframe document has actually
+      // finished loading — fading immediately on click left a blank black
+      // gap while Drive's player was still initializing, which looked like
+      // a broken button and needed a confusing second tap to fix.
+      frame.addEventListener('load', ()=>{
+        setTimeout(()=>{
+          spinner.classList.remove('visible');
+          poster.style.opacity = '0';
+          poster.style.pointerEvents = 'none';
+          setTimeout(()=>{ if(poster.parentNode) poster.style.display = 'none'; }, 320);
+        }, 450);
+      }, { once:true });
       frame.src = frame.dataset.src;
-      poster.style.opacity = '0';
-      poster.style.pointerEvents = 'none';
-      setTimeout(()=>{ if(poster.parentNode) poster.style.display = 'none'; }, 320);
     }
     poster.addEventListener('click', activate);
     poster.addEventListener('keydown', e=>{
