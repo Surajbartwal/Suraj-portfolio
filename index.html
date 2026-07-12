@@ -446,28 +446,6 @@ body.loading{overflow:hidden;}
   </div>
 </section>
 
-<!-- TESTIMONIALS — currently disabled to avoid showing placeholder/fake quotes.
-     When you have real client feedback, remove this comment wrapper and fill
-     in the blanks. Example structure:
-
-<section id="testimonials">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow grad-text">TESTIMONIALS</span>
-      <h2 class="section-title">What clients say</h2>
-    </div>
-    <div class="testimonials-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;">
-      <div class="chip" style="display:block;padding:22px;border-radius:16px;">
-        <p style="color:var(--text-dim);margin-bottom:12px;">"Quote from the client goes here."</p>
-        <strong>Client Name</strong><br><span style="color:var(--text-faint);font-size:.8rem;">Role, Company</span>
-      </div>
-    </div>
-  </div>
-</section>
-
--->
-
-
 <!-- TOOLS -->
 <section id="stack">
   <div class="container">
@@ -540,38 +518,6 @@ body.loading{overflow:hidden;}
   'use strict';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ==============================================================
-     ★ EDIT YOUR PORTFOLIO HERE — this is the ONLY place you need
-       to touch. There is no admin UI on the live site anymore;
-       everything is controlled from this code block.
-
-     SITE_CONFIG.brandIconLink   → nav logo + browser tab favicon
-     SITE_CONFIG.profilePhotoLink → About section headshot
-
-     PROJECT_LINKS.<category>[slot] → { title, link, tag, meta }
-       - Google Drive share link  → embed, autoplay-on-hover/click,
-         opens Google's own player in the modal.
-       - Direct video file URL (.mp4/.webm/.mov) → switches to the
-         built-in custom player: hover/click autoplay + a minimal
-         control bar (play/pause, seek, mute) that auto-hides while
-         playing and reappears on tap/mousemove. Useful if you want
-         to self-host a couple of flagship reels on a CDN instead of
-         Google Drive for faster, more reliable playback.
-       - Leave "link" empty ('') to show a "Coming soon" slot.
-       - tag: 'ai' or 'traditional' — powers the filter pills above the grid.
-       - meta: short one-line caption shown under the title (tools used,
-         result, etc). Leave '' to hide it.
-
-     FEATURED_PROJECT → picks one entry above to spotlight at the top
-       of the Work section. Set to null to hide it entirely.
-
-     PALETTES → the color-theme options offered from the palette
-       button in the nav (paint-bucket icon, top right). Each entry
-       maps to a set of CSS variables. Add / remove / rename entries
-       freely; the button + dropdown menu build themselves from this
-       list automatically. The visitor's last pick is remembered
-       (localStorage) so it persists across visits.
-     ============================================================== */
   const SITE_CONFIG = {
     brandIconLink: 'https://drive.google.com/file/d/1RO_rFDUqr5buUsKSwB-cAP2FnbBuw0JN/preview',
     profilePhotoLink: 'https://drive.google.com/file/d/1CbU0bMw47duakkvSp3g1D5c9IiN2xti_/preview',
@@ -589,9 +535,6 @@ body.loading{overflow:hidden;}
     { key:'cyber',    label:'Cyber Neon', swatch:'#e14bf2', vars:{ '--bg':'#08050f', '--accent-1':'#e14bf2', '--accent-2':'#7c3aed', '--accent-3':'#22e0e0', '--text':'#f3edfd', '--text-dim':'#a692c4', '--text-faint':'#5f4f7a' } }
   ];
   const PALETTE_STORAGE_KEY = 'suraj-portfolio-palette';
-  // Which palette (by "key" above) loads for first-time visitors.
-  // Once someone picks a theme from the nav button, their choice is
-  // remembered and overrides this on their return visits.
   const DEFAULT_PALETTE = 'aurora';
 
   const PROJECT_LINKS = {
@@ -748,7 +691,6 @@ body.loading{overflow:hidden;}
     }
     if(document.readyState === 'complete'){ finish(); }
     else { window.addEventListener('load', finish); }
-    // Safety net in case 'load' never fires cleanly (slow embeds etc.)
     setTimeout(hideLoadingScreen, 4000);
   }
 
@@ -814,9 +756,15 @@ body.loading{overflow:hidden;}
   function bindEmbedHover(wrap){
     const media = wrap.querySelector('.slot-media');
     const frame = wrap.querySelector('.drive-frame');
-    if(!media || !frame || reduceMotion) return;
-    media.addEventListener('mouseenter', ()=>{ frame.src = withAutoplay(frame.dataset.baseSrc); });
-    media.addEventListener('mouseleave', ()=>{ frame.src = frame.dataset.baseSrc; });
+    if(!media || !frame) return;
+    const warm = ()=>{ if(frame.dataset.inModal) return; frame.src = withAutoplay(frame.dataset.baseSrc); };
+    const cool = ()=>{ if(frame.dataset.inModal) return; frame.src = frame.dataset.baseSrc; };
+    if(!reduceMotion){
+      media.addEventListener('mouseenter', warm);
+      media.addEventListener('mouseleave', cool);
+    }
+    // Touch devices never fire mouseenter, so warm the preview on first touch too.
+    media.addEventListener('touchstart', warm, { passive:true });
   }
   function bindNativeHover(wrap){
     const media = wrap.querySelector('.slot-media');
@@ -827,10 +775,14 @@ body.loading{overflow:hidden;}
       dur.className='duration-badge'; dur.textContent = fmtDuration(video.duration);
       media.appendChild(dur);
     };
+    const play = ()=>{ if(video.dataset.inModal) return; video.play().catch(()=>{}); };
+    const stop = ()=>{ if(video.dataset.inModal) return; video.pause(); video.currentTime = 0; };
     if(!reduceMotion){
-      media.addEventListener('mouseenter', ()=>video.play().catch(()=>{}));
-      media.addEventListener('mouseleave', ()=>{ video.pause(); video.currentTime = 0; });
+      media.addEventListener('mouseenter', play);
+      media.addEventListener('mouseleave', stop);
     }
+    // Touch devices never fire mouseenter, so start the preview on first touch too.
+    media.addEventListener('touchstart', play, { passive:true });
   }
 
   /* Removes the shimmer once media is ready; shows a fallback if it never loads. */
@@ -873,15 +825,13 @@ body.loading{overflow:hidden;}
     const previewBtn = wrap.querySelector('.preview-open-btn');
     const fsBtn = wrap.querySelector('.fullscreen-open-btn');
     const media = wrap.querySelector('.slot-media');
-    if(previewBtn) previewBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, false); });
-    if(fsBtn) fsBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, true); });
-    if(media) media.addEventListener('click', ()=>openModal(fullEntry, false));
+    // Pass `wrap` through so the modal can borrow the already-loading/playing
+    // element from the grid instead of starting a brand-new one from scratch.
+    if(previewBtn) previewBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, false, wrap); });
+    if(fsBtn) fsBtn.addEventListener('click', e=>{ e.stopPropagation(); openModal(fullEntry, true, wrap); });
+    if(media) media.addEventListener('click', ()=>openModal(fullEntry, false, wrap));
   }
 
-  /* Builds empty skeleton shells for every category up front, but only
-     renders real embeds/video for the active category. Other categories
-     render lazily the first time their tab is opened — keeps initial
-     iframe count (and load) low. */
   function buildGrids(){
     categories.forEach(cat=>{
       const grid = document.getElementById('grid-'+cat.key);
@@ -959,15 +909,10 @@ body.loading{overflow:hidden;}
           <button type="button" class="btn btn-grad" id="featuredOpenBtn">Watch project</button>
         </div>
       </div>`;
-    // Clicking the thumbnail itself still opens the full preview modal.
     document.getElementById('featuredMedia').addEventListener('click', ()=>openModal({ ...entry, kind }, false));
-    // "Watch project" jumps to the second video in this project's category instead.
     document.getElementById('featuredOpenBtn').addEventListener('click', ()=>jumpToCategorySlot(FEATURED_PROJECT.category, 1));
   }
 
-  /* Switches to the given category tab (rendering it if needed), then
-     smooth-scrolls to a specific slot within its grid and gives it a
-     brief highlight pulse so it's obvious where the view landed. */
   function jumpToCategorySlot(catKey, slotIdx){
     setActiveTab(catKey);
     requestAnimationFrame(()=>{
@@ -1019,7 +964,6 @@ body.loading{overflow:hidden;}
   catCards.forEach(c=>c.addEventListener('click', ()=>setActiveTab(c.dataset.cat)));
   dots.forEach(d=>d.addEventListener('click', ()=>setActiveTab(d.dataset.cat)));
 
-  /* Keyboard navigation for the category switcher */
   catSwitcher.setAttribute('tabindex','0');
   catSwitcher.addEventListener('keydown', e=>{
     if(e.key === 'ArrowRight'){ e.preventDefault(); catNext.click(); }
@@ -1071,26 +1015,71 @@ body.loading{overflow:hidden;}
   const modalFsBtn = document.getElementById('modalFsBtn');
   const modalClose = document.getElementById('modalClose');
   let hideTimer = null;
+  // Tracks an element borrowed from the grid so it can be handed back on close.
+  let modalSourceMedia = null;
+  let modalBorrowedEl = null;
 
-  function openModal(entry, goFullscreen){
+  function openModal(entry, goFullscreen, sourceWrap){
     modalTitle.textContent = entry.title || 'Untitled project';
+    modalSourceMedia = null;
+    modalBorrowedEl = null;
+    const sourceMedia = sourceWrap ? sourceWrap.querySelector('.slot-media') : null;
+
     if(entry.kind === 'embed'){
-      modalBody.innerHTML = `<iframe src="${withAutoplay(toVideoEmbed(entry.link))}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+      const existingFrame = sourceMedia ? sourceMedia.querySelector('.drive-frame') : null;
+      modalBody.innerHTML = '';
+      if(existingFrame){
+        // Reuse the same iframe that was already warming up / playing in the
+        // grid tile — this is what kills the "black screen, click again" bug,
+        // since we're not asking Drive to cold-start a brand new embed.
+        modalSourceMedia = sourceMedia;
+        modalBorrowedEl = existingFrame;
+        existingFrame.dataset.inModal = '1';
+        existingFrame.setAttribute('allow','autoplay; fullscreen');
+        existingFrame.setAttribute('allowfullscreen','');
+        modalBody.appendChild(existingFrame);
+        existingFrame.src = withAutoplay(existingFrame.dataset.baseSrc);
+      } else {
+        modalBody.innerHTML = `<iframe src="${withAutoplay(toVideoEmbed(entry.link))}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+      }
     } else {
-      modalBody.innerHTML = `<div class="player-wrap">
-          <video id="modalVideo" src="${entry.link}" playsinline autoplay></video>
-          <div class="player-controls visible" id="playerControls">
-            <button type="button" class="player-btn" id="playerPlayBtn" aria-label="Play or pause">
-              <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <input type="range" class="player-seek" id="playerSeek" min="0" max="100" value="0">
-            <span class="player-time" id="playerTime">0:00 / 0:00</span>
-            <button type="button" class="player-btn" id="playerMuteBtn" aria-label="Mute or unmute">
-              <svg id="muteIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 9v6h4l5 5V4l-5 5H5z"/></svg>
-            </button>
-          </div>
-        </div>`;
+      const existingVideo = sourceMedia ? sourceMedia.querySelector('.native-video') : null;
+      const playerWrap = document.createElement('div');
+      playerWrap.className = 'player-wrap';
+      let video;
+      if(existingVideo){
+        modalSourceMedia = sourceMedia;
+        modalBorrowedEl = existingVideo;
+        existingVideo.dataset.inModal = '1';
+        existingVideo.removeAttribute('loop');
+        video = existingVideo;
+      } else {
+        video = document.createElement('video');
+        video.src = entry.link;
+        video.playsInline = true;
+      }
+      video.id = 'modalVideo';
+      playerWrap.appendChild(video);
+      playerWrap.insertAdjacentHTML('beforeend', `<div class="player-controls visible" id="playerControls">
+          <button type="button" class="player-btn" id="playerPlayBtn" aria-label="Play or pause">
+            <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <input type="range" class="player-seek" id="playerSeek" min="0" max="100" value="0">
+          <span class="player-time" id="playerTime">0:00 / 0:00</span>
+          <button type="button" class="player-btn" id="playerMuteBtn" aria-label="Mute or unmute">
+            <svg id="muteIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 9v6h4l5 5V4l-5 5H5z"/></svg>
+          </button>
+        </div>`);
+      modalBody.innerHTML = '';
+      modalBody.appendChild(playerWrap);
       setupCustomPlayer();
+      // Try to play with sound on (this click is the user gesture that allows
+      // it); if the browser blocks unmuted autoplay, fall back to muted so
+      // playback still starts immediately instead of sitting on a black frame.
+      const playAttempt = video.play();
+      if(playAttempt && playAttempt.catch){
+        playAttempt.catch(()=>{ video.muted = true; video.play().catch(()=>{}); });
+      }
     }
     modal.classList.add('open');
     modalClose.focus();
@@ -1108,6 +1097,13 @@ body.loading{overflow:hidden;}
     const muteIcon = document.getElementById('muteIcon');
     const playerWrap = video.closest('.player-wrap');
 
+    function refreshMuteIcon(){
+      muteIcon.innerHTML = video.muted
+        ? '<path d="M16.5 12 21 16.5m0-4.5-4.5 4.5M5 9v6h4l5 5V4l-5 5H5z"/>'
+        : '<path d="M5 9v6h4l5 5V4l-5 5H5z"/>';
+    }
+    refreshMuteIcon();
+
     function showControls(){
       controls.classList.add('visible');
       clearTimeout(hideTimer);
@@ -1115,7 +1111,7 @@ body.loading{overflow:hidden;}
         hideTimer = setTimeout(()=>controls.classList.remove('visible'), 2500);
       }
     }
-    function togglePlay(){ video.paused ? video.play() : video.pause(); }
+    function togglePlay(){ video.paused ? video.play().catch(()=>{}) : video.pause(); }
     playBtn.addEventListener('click', togglePlay);
     video.addEventListener('click', togglePlay);
     video.addEventListener('play', ()=>{ playIcon.innerHTML='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; showControls(); });
@@ -1125,15 +1121,10 @@ body.loading{overflow:hidden;}
       timeEl.textContent = fmtDuration(video.currentTime) + ' / ' + fmtDuration(video.duration||0);
     });
     seek.addEventListener('input', ()=>{ if(video.duration) video.currentTime = (seek.value/100)*video.duration; });
-    muteBtn.addEventListener('click', ()=>{
-      video.muted = !video.muted;
-      muteIcon.innerHTML = video.muted
-        ? '<path d="M16.5 12 21 16.5m0-4.5-4.5 4.5M5 9v6h4l5 5V4l-5 5H5z"/>'
-        : '<path d="M5 9v6h4l5 5V4l-5 5H5z"/>';
-    });
+    muteBtn.addEventListener('click', ()=>{ video.muted = !video.muted; refreshMuteIcon(); });
     playerWrap.addEventListener('mousemove', showControls);
     playerWrap.addEventListener('click', showControls);
-    playerWrap.addEventListener('touchstart', showControls);
+    playerWrap.addEventListener('touchstart', showControls, { passive:true });
     showControls();
   }
 
@@ -1141,6 +1132,22 @@ body.loading{overflow:hidden;}
     modal.classList.remove('open');
     const v = modalBody.querySelector('video'); if(v) v.pause();
     clearTimeout(hideTimer);
+    if(modalBorrowedEl && modalSourceMedia){
+      // Hand the borrowed element back to its grid tile so hover/touch
+      // preview keeps working next time, instead of leaving the tile empty.
+      if(modalBorrowedEl.classList.contains('drive-frame')){
+        modalBorrowedEl.src = modalBorrowedEl.dataset.baseSrc;
+      } else if(modalBorrowedEl.tagName === 'VIDEO'){
+        modalBorrowedEl.muted = true;
+        modalBorrowedEl.loop = true;
+        modalBorrowedEl.pause();
+        modalBorrowedEl.currentTime = 0;
+      }
+      delete modalBorrowedEl.dataset.inModal;
+      modalSourceMedia.appendChild(modalBorrowedEl);
+    }
+    modalBorrowedEl = null;
+    modalSourceMedia = null;
     modalBody.innerHTML = '';
     if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
   }
